@@ -16,8 +16,11 @@
 	var obj = { 
 			nomService: "EnregistrerUtilisateur", 
 			data: {
-				login: "toto", 
-				mdp: "zozo"
+				login: "kaiji", 
+				mdp: "md5",
+				nom: "chat",
+				photo: "moche",
+				description : "alors"
 			}
 	}; 
 

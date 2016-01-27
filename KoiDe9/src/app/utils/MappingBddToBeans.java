@@ -17,13 +17,13 @@ public class MappingBddToBeans {
 				
 		while(rs.next()){
 			final Utilisateur utilisateur = new Utilisateur();
-			utilisateur.setNumu(rs.getInt(Utilisateur.NUMU));
-			utilisateur.setLogin(rs.getString(Utilisateur.LOGIN));
-			utilisateur.setNom(rs.getString(Utilisateur.NOM));
-			utilisateur.setMdp(rs.getString(Utilisateur.MDP));
-			utilisateur.setPhoto(rs.getString(Utilisateur.PHOTO));
-			utilisateur.setDescription(rs.getString(Utilisateur.DESCRIPTION));
-			utilisateur.setInfosPrivees(rs.getBoolean(Utilisateur.INFOSPRIVEES));
+			utilisateur.setNumu(rs.getInt(TabAndCo.USERS_NUMU));
+			utilisateur.setLogin(rs.getString(TabAndCo.USERS_LOGIN));
+			utilisateur.setNom(rs.getString(TabAndCo.USERS_NOM));
+			utilisateur.setMdp(rs.getString(TabAndCo.USERS_MDP));
+			utilisateur.setEmail(rs.getString(TabAndCo.USERS_EMAIL));
+			utilisateur.setPhoto(rs.getString(TabAndCo.USERS_PHOTO));
+			utilisateur.setDescription(rs.getString(TabAndCo.USERS_DESCRIPTION));
 			liste.add(utilisateur);
 		}
 		return liste;

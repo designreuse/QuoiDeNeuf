@@ -1,6 +1,7 @@
 package services.objects;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class RequestObject {
@@ -34,5 +35,17 @@ public class RequestObject {
 		return requestObject;
 	}
 	
+	public String getDataStringValue(String key) {
+		final JsonElement el = this.data.get(key);
+		
+		return el == null ? "" : el.getAsString();
+		
+	}
+	
+	public int getDataIntValue(String key) {
+		final JsonElement el = this.data.get(key);
+		return el == null ? null : Integer.parseInt(el.getAsString());
+		
+	}
 	
 }

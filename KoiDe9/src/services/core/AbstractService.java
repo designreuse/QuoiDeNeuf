@@ -35,7 +35,7 @@ public abstract class AbstractService {
 
     	// Verification des champs requis
     	for(String champ : requiredData){
-    		if(data.get(champ) == null){
+    		if(data.get(champ) == null || data.get(champ).getAsString().isEmpty()){
     			ServiceUtils.logger.error("Service " +requestObject.getNomService()+ ": champ " +champ+ " requis manquant.");
     			return false;
     		}
