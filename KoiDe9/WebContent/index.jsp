@@ -14,7 +14,7 @@
 <script src="./js/jq.js"></script>
 <script>
 	var obj = { 
-			nomService: "EnregistrerUtilisateur", 
+			nomService: "VerifierUtilisateur", 
 			data: {
 				login: "kaiji", 
 				mdp: "md5",
