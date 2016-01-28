@@ -4,9 +4,10 @@
   <!-- Definition du pool -->
   <Resource name="mabase" auth="Container" type="javax.sql.DataSource"
   maxActive="8" maxIdle="4" maxWait="10000"
-  username="zemmiriz" password="moi" driverClassName="org.postgresql.Driver"
-  url="jdbc:postgresql://psqlserv/da2i" />
+  username="zemmiriz" password="moi" driverClassName="org.postgresql.Driver"  url="jdbc:postgresql://psqlserv/da2i" />
 
+<!--
+  username="postgres" password="aaa" driverClassName="org.postgresql.Driver"  url="jdbc:postgresql://localhost/postgres" />
+-->
 
- 
 </Context>
