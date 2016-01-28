@@ -1,6 +1,7 @@
 package services.core;
 
 import services.utilisateur.EnregistrerUtilisateurService;
+import services.utilisateur.LireUtilisateurService;
 import services.utilisateur.VerifierUtilisateurService;
 
 public class ServiceFactory {
@@ -19,6 +20,7 @@ public class ServiceFactory {
         switch(nomService){
             case "EnregistrerUtilisateur"	: return new EnregistrerUtilisateurService();
             case "VerifierUtilisateur"		: return new VerifierUtilisateurService();
+            case "LireUtilisateur"			: return new LireUtilisateurService();
             
             default : return null;
                 

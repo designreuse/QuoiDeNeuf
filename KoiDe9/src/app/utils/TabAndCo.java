@@ -11,4 +11,18 @@ public class TabAndCo {
 	final public static String USERS_DESCRIPTION  = "description";
 	final public static String USERS_EMAIL 	= "email";
 		
+	public static String[] getRequiredFields(final String table){
+		switch (table) {
+		case TABLE_USERS : return new String[]{USERS_LOGIN, USERS_MDP};
+			
+
+		default: return null;
+		}		
+	}
+	
+	
+	
+	
+	
+	
 }

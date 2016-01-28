@@ -14,11 +14,11 @@
 <script src="./js/jq.js"></script>
 <script>
 	var obj = { 
-			nomService: "VerifierUtilisateur", 
+			nomService: "LireUtilisateur", 
 			data: {
-				login: "kaiji", 
-				mdp: "md5",
 				nom: "chat",
+				login: "kaiji3", 
+				mdp: "aaa",
 				photo: "moche",
 				description : "alors"
 			}

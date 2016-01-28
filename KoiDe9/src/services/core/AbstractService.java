@@ -9,9 +9,11 @@ import services.objects.ResponseObject;
 public abstract class AbstractService {
 	
 	protected ResponseObject responseObject;
-
+	protected String[] requiredData;
+	
 	public AbstractService(){
-		this.responseObject = new ResponseObject();
+		this.responseObject = new ResponseObject();		
+		this.requiredData = new String[0];
 	}
 
 	// GET-SET ////////////////////////////////////////////////////////////////
@@ -30,7 +32,7 @@ public abstract class AbstractService {
      * @param requiredData : liste des champs requis
      * @return boolean : Vrai si tous les champs requis sont presents
      */
-	protected boolean validate(final RequestObject requestObject, final String[] requiredData) {
+	protected boolean validate(final RequestObject requestObject) {
 		final JsonObject data = requestObject.getData();
 
     	// Verification des champs requis
@@ -44,10 +46,26 @@ public abstract class AbstractService {
 	}
     
 
-    abstract public ResponseObject execute(final RequestObject requestObject);
+    /**
+     * @param requestObject
+     * @return
+     */
+    protected ResponseObject execute(final RequestObject requestObject){
+		if (validate(requestObject)) {
+			serviceLogic(requestObject);
+		}else{
+			this.responseObject.setResponseData(ResponseObject.RETURN_CODE_ERROR, "Champ requis manquant", null);
+		}
+		return this.responseObject;
+    }
     
     
-
+    /**
+     * Contient l'ensemble des traitements lies au service.
+     * @param requestObject : donnees envoyees par le client
+     * @return ResponseObject : reponse du service
+     */
+    abstract public ResponseObject serviceLogic(final RequestObject requestObject);
     
 	
 	
