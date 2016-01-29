@@ -2,6 +2,7 @@ package services.core;
 
 import services.utilisateur.EnregistrerUtilisateurService;
 import services.utilisateur.LireUtilisateurService;
+import services.utilisateur.RechercherUtilisateurService;
 import services.utilisateur.VerifierUtilisateurService;
 
 public class ServiceFactory {
@@ -12,7 +13,7 @@ public class ServiceFactory {
         if(instance == null){
         	instance = createService(nomService);
         }
-        return instance;
+        return createService(nomService);
     }
 
 
@@ -21,6 +22,7 @@ public class ServiceFactory {
             case "EnregistrerUtilisateur"	: return new EnregistrerUtilisateurService();
             case "VerifierUtilisateur"		: return new VerifierUtilisateurService();
             case "LireUtilisateur"			: return new LireUtilisateurService();
+            case "RechercherUtilisateur"	: return new RechercherUtilisateurService();
             
             default : return null;
                 

@@ -20,7 +20,6 @@ public class MappingBddToBeans {
 			utilisateur.setNumu(rs.getInt(TabAndCo.USERS_NUMU));
 			utilisateur.setLogin(rs.getString(TabAndCo.USERS_LOGIN));
 			utilisateur.setNom(rs.getString(TabAndCo.USERS_NOM));
-			utilisateur.setMdp(rs.getString(TabAndCo.USERS_MDP));
 			utilisateur.setEmail(rs.getString(TabAndCo.USERS_EMAIL));
 			utilisateur.setPhoto(rs.getString(TabAndCo.USERS_PHOTO));
 			utilisateur.setDescription(rs.getString(TabAndCo.USERS_DESCRIPTION));
