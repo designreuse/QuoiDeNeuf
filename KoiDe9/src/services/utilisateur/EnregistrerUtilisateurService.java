@@ -48,10 +48,19 @@ public class EnregistrerUtilisateurService extends AbstractService {
 				pst.setString(3, nom);
 				pst.setString(4, requestObject.getDataStringValue(TabAndCo.USERS_EMAIL));
 				pst.setString(5, requestObject.getDataStringValue(TabAndCo.USERS_DESCRIPTION));
-				pst.setString(6, "/img/avatars/default.png");
+				pst.setString(6, "default.png");
 				
 				pst.executeUpdate();
-				this.responseObject.setResponseData(ResponseObject.RETURN_CODE_OK, "Utilisateur"+ requestObject.getDataStringValue(TabAndCo.USERS_LOGIN) + " créé.", null);
+				
+				Statement stt = connection.createStatement();
+                stt.executeUpdate("insert into usergroups values ((select numu from users where login='"+login+"') , 1) ;"
+                        +"insert into usergroups values ((select numu from users where login='"+login+"') , 2);"
+                        +"insert into usergroups values ((select numu from users where login='"+login+"') , 3);" 
+                        +"insert into usergroups values ((select numu from users where login='"+login+"') , 4);");
+				
+				
+				
+				this.responseObject.setResponseData(ResponseObject.RETURN_CODE_OK, "Utilisateur "+ requestObject.getDataStringValue(TabAndCo.USERS_LOGIN) + " créé.", null);
 				
 			} catch (SQLException e) {
 				ServiceUtils.logger.error("Erreur exec SQL");

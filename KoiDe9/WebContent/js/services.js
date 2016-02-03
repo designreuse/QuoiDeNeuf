@@ -11,8 +11,9 @@ var services = {
 	},
 	
 		
-	showErrorAlert : function(id, msg){
-		$("#"+id).html('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +msg+ '</div>');
+	showErrorAlert : function(id, msg, type){
+		var type = type || "danger";
+		$("#"+id).html('<div class="alert alert-' +type+ '"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +msg+ '</div>');
 	}
 	
 	

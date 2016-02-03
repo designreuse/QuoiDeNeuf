@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	$('#modUserForm').submit(false);
-	var submitBtn = $("#submitBtn");
+	var submitBtn = document.getElementById("submitBtn");
 
 	
 	// Verifier l'utilisateur
@@ -29,6 +29,47 @@ $(document).ready(function() {
 	    });
 	};
 	
+
+	// Enreg l'utilisateur
+	var enregUsr = function(){
+		submitBtn.disabled = true;
+		var obj = { 
+				nomService: "EnregistrerUtilisateur", 
+				data: {
+					login: encodeHtmlEntity($("#login").val()), 
+					mdp: encodeHtmlEntity($("#mdp").val()),
+					nom: encodeHtmlEntity($("#nom").val()) || login,
+					email: encodeHtmlEntity($("#email").val()),
+					description: encodeHtmlEntity($("#description").val())
+					
+				}
+		};
+		
+		services.call(obj, function(data) {
+			submitBtn.disabled = false;	
+	    	var reponse = JSON.parse(data.responseText);
+	        
+	    	if(reponse){
+	    		if(reponse.returnCode == 8){
+	    			services.showErrorAlert("errorZone", reponse.message);
+	    		}else{
+	    			services.showErrorAlert("errorZone", reponse.message, "success");
+	    			setTimeout(function(){ 
+	    				location.replace("./app/main.jsp");	    			
+	    			}, 2000);
+	    		}
+	    	}
+	        
+	    });
+	};
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	// Validation du formulaire	
@@ -44,7 +85,15 @@ $(document).ready(function() {
 	        	mdp: { required: "Le champ mot de passe est requis.", minlength: "Taille minimale de 3." }
 	      },
 	      errorClass: "invalid",
-	      submitHandler: verifierUsr
+	      submitHandler: function(){
+	    	  if( document.getElementById("chxConnex").checked){
+	    		  verifierUsr();  
+	    	  }else{
+	    		  enregUsr();
+	    	  }
+	    	  
+	    	    
+	      }
 	});
 
 

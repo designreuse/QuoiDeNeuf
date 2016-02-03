@@ -39,7 +39,7 @@
 	<div id="errorZone"></div>
       <div class="col-md-4 col-md-offset-4" id="form-step-1">
       	
-        <form class="form" id="connexionForm" name="connexionForm" autocomplete="off">
+        <form class="form" id="connexionForm" name="connexionForm">
           <fieldset>
             <legend>
 				<input type="radio" name="usrMode" id="chxConnex" value="chxConnex" checked="checked">
@@ -61,7 +61,7 @@
 		
 		</fieldset>
 		<hr>
-          <input type="submit" id="submitBtn" class="btn btn-block btn-success" value="S'inscrire">
+          <input type="submit" id="submitBtn" class="btn btn-block btn-success" value="Se connecter">
         </form>
       </div>
 
