@@ -1,12 +1,9 @@
 package app.utils;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import services.objects.RequestObject;
 
 public class BddUtils {
 
@@ -61,12 +58,8 @@ public class BddUtils {
 			ServiceUtils.logger.error("Erreur lors de la recuperation du Statement ");
 			e.printStackTrace();
 		}finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				ServiceUtils.logger.error("Erreur close connexion");
-				e.printStackTrace();
-			}
+			try { connection.close();
+			} catch (SQLException e) { ServiceUtils.logger.error("Erreur close connexion"); e.printStackTrace(); }
 		}
 		
 		return res;

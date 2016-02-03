@@ -31,7 +31,9 @@ public class RequestObject {
 	public static RequestObject jsonToRequestObject(final String userDataJson) {
 		final Gson gson = new Gson();
 		final RequestObject requestObject = gson.fromJson(userDataJson, RequestObject.class);
-		requestObject.setRawJson(userDataJson);
+		if(requestObject != null){
+			requestObject.setRawJson(userDataJson);
+		} 
 		return requestObject;
 	}
 	

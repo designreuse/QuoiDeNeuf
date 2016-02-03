@@ -6,18 +6,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.servlet.ServletRequest;
+
 import app.utils.MappingBddToBeans;
 import app.utils.ServiceUtils;
 import app.utils.TabAndCo;
+import services.beans.Utilisateur;
 import services.core.AbstractService;
 import services.objects.RequestObject;
 import services.objects.ResponseObject;
-import services.objects.Utilisateur;
 
 public class RechercherUtilisateurService extends AbstractService{
 	
 	@Override
-	public ResponseObject serviceLogic(RequestObject requestObject) {
+	public ResponseObject serviceLogic(RequestObject requestObject, ServletRequest servletRequest) {
 		
 		final Connection connection = ServiceUtils.getConnection();
 		

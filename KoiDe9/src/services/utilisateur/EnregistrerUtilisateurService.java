@@ -1,6 +1,9 @@
 package services.utilisateur;
 
 import java.sql.*;
+
+import javax.servlet.ServletRequest;
+
 import app.utils.BddUtils;
 import app.utils.ServiceUtils;
 import app.utils.TabAndCo;
@@ -17,7 +20,7 @@ public class EnregistrerUtilisateurService extends AbstractService {
 	}
 	
 	@Override
-	public ResponseObject serviceLogic(RequestObject requestObject) {
+	public ResponseObject serviceLogic(RequestObject requestObject, ServletRequest servletRequest) {
 		final String login = requestObject.getDataStringValue(TabAndCo.USERS_LOGIN);
 		
 		// Verifier si le login est deja utilise
@@ -25,6 +28,10 @@ public class EnregistrerUtilisateurService extends AbstractService {
 		if(existeDeja){
 			this.responseObject.setResponseData(ResponseObject.RETURN_CODE_ERROR, "Login " +login+ " deja utilisé", null);
 		}else{
+			// Creer un utilisateur
+			// Associer les groupes par defaut
+			
+			
 			
 			final Connection connection = ServiceUtils.getConnection();
 			final StringBuilder req = new StringBuilder("INSERT INTO users (login, mdp, nom, email, description, photo) values (?,md5(?),?,?,?,?);" );

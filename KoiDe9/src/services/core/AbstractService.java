@@ -1,5 +1,7 @@
 package services.core;
 
+import javax.servlet.ServletRequest;
+
 import com.google.gson.JsonObject;
 
 import app.utils.ServiceUtils;
@@ -48,11 +50,13 @@ public abstract class AbstractService {
 
     /**
      * @param requestObject
+     * @param resp 
+     * @param req 
      * @return
      */
-    protected ResponseObject execute(final RequestObject requestObject){
+    protected ResponseObject execute(final RequestObject requestObject, ServletRequest servletRequest){
 		if (validate(requestObject)) {
-			serviceLogic(requestObject);
+			serviceLogic(requestObject, servletRequest);
 		}else{
 			this.responseObject.setResponseData(ResponseObject.RETURN_CODE_ERROR, "Champ requis manquant", null);
 		}
@@ -63,9 +67,10 @@ public abstract class AbstractService {
     /**
      * Contient l'ensemble des traitements lies au service.
      * @param requestObject : donnees envoyees par le client
+     * @param req 
      * @return ResponseObject : reponse du service
      */
-    abstract public ResponseObject serviceLogic(final RequestObject requestObject);
+    abstract public ResponseObject serviceLogic(final RequestObject requestObject, ServletRequest servletRequest);
     
 	
 	

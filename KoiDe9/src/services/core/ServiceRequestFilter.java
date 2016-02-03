@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebFilter;
 
 import com.google.gson.JsonParseException;
 
+import app.utils.ServiceUtils;
 import services.objects.RequestObject;
 import services.objects.ResponseObject;
 
@@ -27,6 +28,8 @@ public class ServiceRequestFilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+
+		ServiceUtils.logger.info("Reception requete depuis : " +req.getRemoteAddr() + ":" + req.getRemotePort());
 		final BufferedReader br = new BufferedReader(new InputStreamReader(req.getInputStream()));
 		
 		// On recupere le flux json

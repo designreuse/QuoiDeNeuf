@@ -1,8 +1,16 @@
 package services.utilisateur;
 
 import java.sql.*;
+import java.util.List;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import app.utils.MappingBddToBeans;
 import app.utils.ServiceUtils;
 import app.utils.TabAndCo;
+import services.beans.Utilisateur;
 import services.core.AbstractService;
 import services.objects.RequestObject;
 import services.objects.ResponseObject;
@@ -20,7 +28,7 @@ public class VerifierUtilisateurService extends AbstractService {
 	
 	
 	@Override
-	public ResponseObject serviceLogic(RequestObject requestObject) {
+	public ResponseObject serviceLogic(RequestObject requestObject, ServletRequest servletRequest) {
 		final Connection connection = ServiceUtils.getConnection();
 		
 		try {
@@ -32,11 +40,17 @@ public class VerifierUtilisateurService extends AbstractService {
 			pst.setString(2, mdp);
 			 
 			final ResultSet rs = pst.executeQuery();
-			if(rs.next()) {
-				this.responseObject.setResponseData(ResponseObject.RETURN_CODE_OK, "Utilisateur " +login+ " bien identifié vous allez être redirigé vers votre page", null);
-				ServiceUtils.logger.warn("Utilisateur " +login+ " connecté.");
+			final List<Utilisateur> liste = MappingBddToBeans.resultsetToListUtilisateur(rs);
+			if(liste.size() == 1){
+				this.responseObject.setResponseData(ResponseObject.RETURN_CODE_OK, "Utilisateur " +login+ " bien identifié vous allez être redirigé vers votre page", liste);
+				final Utilisateur utilisateur = liste.get(0);
+				ServiceUtils.logger.info("Utilisateur " +login+ " connecté.");
+				
+				final HttpServletRequest httpServReq = (HttpServletRequest) servletRequest;
+				final HttpSession session = httpServReq.getSession();
+				session.setAttribute("dejaConnecte", utilisateur);
 			}else{
-			 	this.responseObject.setResponseData(ResponseObject.RETURN_CODE_ERROR, "Login ou mot de passe incorrect.", null);
+			 	this.responseObject.setResponseData(ResponseObject.RETURN_CODE_ERROR, "Erreur : Login ou mot de passe incorrect.", null);
 			}
 		} catch (SQLException e) {
 			ServiceUtils.logger.error("Erreur SQLException");
@@ -47,6 +61,9 @@ public class VerifierUtilisateurService extends AbstractService {
 		}
 		return this.responseObject;
 	}
+
+
+
 	
 	
 }

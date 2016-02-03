@@ -5,7 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import services.objects.Utilisateur;
+import services.beans.Groupe;
+import services.beans.Utilisateur;
 
 public class MappingBddToBeans {
 
@@ -24,6 +25,19 @@ public class MappingBddToBeans {
 			utilisateur.setPhoto(rs.getString(TabAndCo.USERS_PHOTO));
 			utilisateur.setDescription(rs.getString(TabAndCo.USERS_DESCRIPTION));
 			liste.add(utilisateur);
+		}
+		return liste;
+	}
+
+	public static List<Groupe> resultsetToListGroupe(final ResultSet rs) throws SQLException {
+		final List<Groupe> liste = new ArrayList<Groupe>();
+		
+		while(rs.next()){
+			final Groupe groupe = new Groupe();
+			
+			groupe.setIdgrp(rs.getInt(TabAndCo.GROUPS_IDGRP));
+			groupe.setLibelle(rs.getString(TabAndCo.GROUPS_LIBELLE));
+			liste.add(groupe);
 		}
 		return liste;
 	}

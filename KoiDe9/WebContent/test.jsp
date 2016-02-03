@@ -15,6 +15,9 @@
   		<option value="VerifierUtilisateur" selected>VerifierUtilisateur</option>
   		<option value="LireUtilisateur">LireUtilisateur</option>
   		<option value="RechercherUtilisateur">RechercherUtilisateur</option>
+  		<option value="EnregistrerGroupe">EnregistrerGroupe</option>
+  		<option value="GetListeGroupe">GetListeGroupe</option>
+  		<option value="GetListeUtilisateursGroupe">GetListeUtilisateursGroupe</option>
 	</select>
 	<input type="button" value="envoyer" id="btn"/>
 	</div>
@@ -36,20 +39,21 @@
 <script src="js/vendor/jquery-1.12.0.min.js"></script>
 <script>
 
-	
-
 
 $("#btn").on("click", function(){
 	var obj = { 
 			nomService: $( "#svc" ).val(), 
 			data: {
-				numu: 5,
+				libelle : "",
+				numu: 2,
 				nom: "",
 				login: "kaiji3", 
 				mdp: "aaa",
 				photo: "moche",
 				description : "alors",
-				recherche : "23"
+				recherche : "23",
+				uparent : 1,
+				idgrp: 3
 			}
 	}; 
 
