@@ -34,9 +34,9 @@
 
 
 	<div class="clearfix container main mainDiag">
-		<input type="button" class="col-md-1 btn btn-success" name="flipbox" id="flipbox" value="Mon profil" />
-		<input type="button" class="col-md-2 btn btn-success" name="showGrps" id="showGrps" value="Mes groupes" />
-		<input type="button" class="col-md-2 btn btn-info" name="addnewusers" id="addnewusers" value="Trouver des utilisateurs" />
+		<button type="button" class="col-md-2 btn btn-success" name="showprofil" id="showprofil"><span class="glyphicon glyphicon-user"></span> Mon Profil</button>
+		<button type="button" class="col-md-2 btn btn-success" name="showGrps" id="showGrps" value="Mes groupes" ><span class="glyphicon glyphicon glyphicon-list-alt"></span> Mes groupes</button>
+		<button type="button" class="col-md-3 btn btn-success" name="addnewusers" id="addnewusers" ><span class="glyphicon glyphicon glyphicon-search"></span> Trouver des utilisateurs</button>
 		<div class="mainc">
 			<div id="card">
 				<div class="col-xs-12 front" id="front">
@@ -51,7 +51,7 @@
 						</blockquote>
 					</div>
 				</div>
-				<div class="col-xs-12 back" id="back" style="display: none;">
+				<div class="col-xs-12 back" id="backDetailUsr" style="display: none;">
 					<div id="errorZone"></div>
 					<form class="form" id="modUserForm" name="modUserForm">
 						<fieldset>
@@ -113,7 +113,23 @@
 
 						</fieldset>
 					</form>
-				</div>
+				</div> <!-- fin back1 -->
+				
+					<div class="col-md-12 back" id="backRecherche" style="display: none;">
+					<div id="errorZoneRecherche"></div>
+		<div class="input-group">
+			<input type="search" class="form-control" id="nomRecherche" placeholder="Nom ou login d'un utilisateur">
+			<span class="input-group-btn">
+				<button id="rechercherBtn" class="btn btn-primary" type="button">Rechercher</button>
+			</span>
+		</div>
+	<br />
+	<br />
+	<div class="col-md-12" id="resultatRechZone">
+		<div id="errorZone"></div>
+		<table class="table table-hover table-condensed" id="tableUsers"></table>
+	</div><!-- fin back2 -->
+	</div>
 
 
 			</div>
@@ -143,6 +159,13 @@
 <script>
 	$('#modUserForm').submit(false);
 	var submitBtn = $("#btnAppliquer");		
+	var rechercherUsrBtn = $("#addnewusers");
+	var afficherProfilBtn = $("#showprofil");
+	var rechercherBtn = $("#rechercherBtn");
+	var listeGroupes = [];
+	var uparent = '${sessionScope["dejaConnecte"].numu}';
+	
+	
 
 	var getListeGroupes = function(){
 		submitBtn.disabled = true;
@@ -163,6 +186,7 @@
 					if(reponse.returnCode === 4){
 						services.showErrorAlert("errorZoneGrp", reponse.message);						
 					}
+					listeGroupes = reponse.response;
 					$.each(reponse.response, function(i, obj){
 						res += "<tr><td><strong>" +obj.libelle+ "</strong></td><td id=lsUsrs_" +obj.idgrp+ "></td></tr>";	
 						getListeUsrGroupes(obj.idgrp);
@@ -170,7 +194,7 @@
 							
 					});
 					res += "</table>";
-					$("#groupeListe").html(res);
+					$("#groupeListe").html(res).hide().fadeIn(600);
 					
 				}
 			}
@@ -339,10 +363,140 @@
 		};
 		
 		var delUsr = function(id){
-			var idgrp = id.split("_")[1];
-			var numu = id.split("_")[2];
-			alert("view de l'utilisateur " +numu+ " du groupe " + idgrp);
+			var obj = {
+					nomService : "SupprimerUtilisateurDunGroupeService",
+					data : {
+						uparent : uparent,
+						ufils : id.split("_")[2],
+						idgrp : id.split("_")[1]
+					}
+				};
+				services.call(obj, function(data) {
+					var resp = JSON.parse(data.responseText);
+					
+					if(resp){
+						if(resp.returnCode === 8 || resp.returnCode === 4){
+							services.showErrorAlert("errorZoneGrp", resp.message);
+						}else{
+							//services.showErrorAlert("errorZoneGrp", resp.message, "success");
+							getListeGroupes();
+						}	
+					}
+				}, true);
 		};
+		
+		
+		
+		
+		
+		var addUsr = function(usrToAdd){
+			var sel = $("#sel_"+usrToAdd);
+			var idgrp = sel.val();
+			
+			var obj = {
+					nomService : "AjouterUtilisateurDansGroupe",
+					data : {
+						uparent : uparent,
+						ufils : usrToAdd,
+						idgrp : sel.val()
+					}
+				};
+				services.call(obj, function(data) {
+					var resp = JSON.parse(data.responseText);
+					
+					if(resp){
+						if(resp.returnCode === 8 || resp.returnCode === 4){
+							services.showErrorAlert("errorZoneRecherche", resp.message);
+						}else{
+							services.showErrorAlert("errorZoneRecherche", resp.message, "success");
+							getListeGroupes();
+						}	
+					}
+				}, true);
+			
+			
+			
+			
+			
+		};
+		
+		
+		
+	
+		
+		
+		
+		
+		
+		// Gestion Recherche
+ var rechercherUtilisateurs = function(){
+	var obj = {
+      nomService: "RechercherUtilisateur",
+      data: {
+          nom: $('#nomRecherche').val()
+      }
+		};
+	
+rechercherBtn.prop('disabled', true);	
+services.call(obj,function(data){
+  var reponse = JSON.parse(data.responseText);
+  $("#errorZone").html("");
+  $("#tableUsers").html("");
+  if(reponse){
+   	rechercherBtn.prop('disabled', false);
+      if(reponse.returnCode == 8){
+          services.showErrorAlert("errorZone", reponse.message);
+      }else if(reponse.returnCode == 4){    
+          services.showErrorAlert("errorZone", reponse.message, "warning");
+      }else{
+      	
+      	
+      	
+          var table=$("#tableUsers");
+          var res = "<tr><th></th><th class='text-center'>Login</th><th class='text-center'>Nom</th><th class='text-center'>Email</th><th></th></tr>";
+          $.each(reponse.response,function(i,o){
+          	
+          	$.get("./tmpl/rowRecherche.tmpl").success(function(contenu){
+				res = contenu.replace(/##idUsr##/g, o.numu)
+							.replace(/##login##/g, o.login)
+							.replace(/##nom##/g, o.nom)
+							.replace(/##email##/g, o.email)
+							.replace(/##photo##/g, "../img/avatars/" + o.photo);
+				
+				
+				
+				$("#tableUsers").append(res);
+				$.each(listeGroupes, function(key, value) {  
+					console.log(key + " : " + value);
+			     $('#sel_'+o.numu)
+			         .append($("<option></option>")
+			         .attr("value",value.idgrp)
+			         .text(value.libelle)); 
+				});
+			});
+          	
+          });
+				
+          $("#tableUsers").html(res);
+          
+      }
+  }
+},true);
+};
+
+rechercherBtn.on("click",rechercherUtilisateurs);
+$("#nomRecherche").on("keyup",rechercherUtilisateurs);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -361,28 +515,65 @@
 
 			
 			
-	// Flip zone detail utilisateur
-	$("#flipbox").on("click", function() {
-		$("#card").toggleClass("flipped");
-		$("#back").slideToggle(200, "swing");
-		$("#front").toggle(400, "swing");
-		$("#flipbox").val(function(i, text) {
-			return text === "Mon profil" ? "Retour" : "Voir profil";
-		})
-		//$("#flipbox").slideToggle(300).slideToggle(100);;
-	});
+
 
 	$("#showGrps").on("click", function() {
+		$("#showGrps").toggleClass("btn-success"); 
 		$("#mygroups").slideToggle(200, "swing");
-		$("#showGrps").val(function(i, text) {
-			return text === "Mes groupes" ? "Cacher les groupes" : "Mes groupes";
-		})
 	});
 
+	
+	
+	
+	// Flip zone detail utilisateur
+	afficherProfilBtn.on("click", function() {
+		afficherProfilBtn.toggleClass("btn-success"); 
+		$("#card").toggleClass("flipped");
+		if($("#card").hasClass("flipped")){
+			$("#backRecherche").hide();
+			$("#backDetailUsr").hide();
+			afficherProfilBtn.prop('disabled', false);
+			rechercherUsrBtn.prop('disabled', true);
+		}else{
+			afficherProfilBtn.prop('disabled', false);
+			rechercherUsrBtn.prop('disabled', false);
+		}
+		
+		
+		
+		$("#backDetailUsr").slideToggle(200, "swing");
+		$("#front").toggle(400, "swing");
+	});
+	
+	rechercherUsrBtn.on("click", function(){
+		rechercherUsrBtn.toggleClass("btn-success"); 
+		$("#card").toggleClass("flipped");
+		if($("#card").hasClass("flipped")){
+			$("#backRecherche").hide();		
+			$("#backDetailUsr").hide();
+			afficherProfilBtn.prop('disabled', true);
+			rechercherUsrBtn.prop('disabled', false);
+		}else{
+			afficherProfilBtn.prop('disabled', false);
+			rechercherUsrBtn.prop('disabled', false);
+		}
+		$("#backRecherche").slideToggle(200, "swing");
+		$("#front").toggle(400, "swing");
+
+	});
+	
+	
+	
+	
 	$(document).ready(function() {
+		
 		validerFormprofil();
 		getListeGroupes();
 	});
+	
+	
+	
+	
 </script>
 
 

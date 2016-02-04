@@ -74,6 +74,14 @@ label.invalid {
 	background: white;
 	border-radius: 4px;
 }
+.rechUsrImg td{
+		width: 80px;
+	height: 80px;
+	border-radius: 8px;
+	padding: 4px;
+	box-shadow: 1px 1px 1px 1px #999;
+	background: #f8f9fa;
+}
 
 .usrthumb {
 	padding: 4px 0;
@@ -86,7 +94,7 @@ label.invalid {
 	height: 80px;
 	border-radius: 8px;
 	padding: 4px;
-	box-shadow: 1px 1px 1px 1px #999;
+	box-shadow: 1px 1px 1px 1px #D4D4D4;
 	background: #f8f9fa;
 }
 .usrthumb p, h4{
@@ -181,5 +189,7 @@ input[type=radio]:checked + label:before {
   transform: rotateY( 180deg );
 }
 
-
+.table-condensed>tbody>tr>td {
+	vertical-align: middle;
+}
 

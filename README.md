@@ -2,7 +2,9 @@
 SYSTEME DE MESSAGERIE INSTANTANEE
 
 ## SERVICES :
-
+#### 03/02/2016
+- [x] AjouterUtilisateurDansGroupe
+- [x] AjouterGroupeUtilisateurService
 #### 29/01/2016
 
 #### 28/01/2016

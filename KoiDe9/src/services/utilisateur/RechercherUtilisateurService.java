@@ -32,12 +32,15 @@ public class RechercherUtilisateurService extends AbstractService{
 			final PreparedStatement pst = connection.prepareStatement(req.toString());
 			pst.setString(1, "%"+recherche+"%");
 			pst.setString(2, "%"+recherche+"%");
-			System.out.println(pst);
+
 			final ResultSet rs = pst.executeQuery();
 			
 			final List<Utilisateur> liste = MappingBddToBeans.resultsetToListUtilisateur(rs);
-			
-			this.responseObject.setResponseData(ResponseObject.RETURN_CODE_OK, "", liste);	
+			if(liste.isEmpty()){
+				this.responseObject.setResponseData(ResponseObject.RETURN_CODE_WARNING, "Aucun utilisateur ne correspond a la recherche.", liste);
+			}else{
+				this.responseObject.setResponseData(ResponseObject.RETURN_CODE_OK, "", liste);	
+			}
 
 		} catch (SQLException e) {
 			 ServiceUtils.logger.error("Erreur SQLException");

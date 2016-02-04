@@ -13,7 +13,10 @@ var services = {
 		
 	showErrorAlert : function(id, msg, type){
 		var type = type || "danger";
-		$("#"+id).html('<div class="alert alert-' +type+ '"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +msg+ '</div>');
+		$("#"+id)
+			.html('<div class="alert alert-' +type+ '"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +msg+ '</div>')
+			.hide()
+			.fadeIn();
 	}
 	
 	

@@ -26,11 +26,12 @@ public class TabAndCo {
 	
 	
 	// Table listeusrgroup ====================================================
-	public static final String TABLE_LISTE_USR_GROUP   = "listeusrgroup";
+	public static final String TABLE_LISTE_USR_GROUP   = "listusrgroup";
 	final public static String LISTE_USR_GROUP_UPARENT = "uparent";
 	final public static String LISTE_USR_GROUP_UFILS   = "ufils";
 	public static final String LISTE_USR_GROUP_IDGRP   = "idgrp";
 	
+
 	
 	
 	public static String[] getRequiredFields(final String table){

@@ -18,6 +18,7 @@
   		<option value="EnregistrerGroupe">EnregistrerGroupe</option>
   		<option value="GetListeGroupe">GetListeGroupe</option>
   		<option value="GetListeUtilisateursGroupe">GetListeUtilisateursGroupe</option>
+  		<option value="AjouterGroupeUtilisateurService">AjouterGroupeUtilisateurService</option>
 	</select>
 	<input type="button" value="envoyer" id="btn"/>
 	</div>
@@ -45,7 +46,7 @@ $("#btn").on("click", function(){
 			nomService: $( "#svc" ).val(), 
 			data: {
 				libelle : "",
-				numu: 2,
+				numu: 1,
 				nom: "",
 				login: "kaiji3", 
 				mdp: "aaa",
@@ -53,7 +54,7 @@ $("#btn").on("click", function(){
 				description : "alors",
 				recherche : "23",
 				uparent : 1,
-				idgrp: 3
+				idgrp: 4
 			}
 	}; 
 

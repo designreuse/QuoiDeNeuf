@@ -64,6 +64,26 @@ public class BddUtils {
 		
 		return res;
 	}
+	public static boolean existeDans(final String table, final String where){
+		final Connection connection = ServiceUtils.getConnection();
+		final StringBuilder req = new StringBuilder("SELECT * FROM " +table+ " WHERE " +where+ ";");
+		boolean res = false;
+		try {
+			final Statement st = connection.createStatement();
+			final ResultSet rs = st.executeQuery(req.toString());
+			
+			res = rs.next();
+			
+		} catch (SQLException e) {
+			ServiceUtils.logger.error("Erreur lors de la recuperation du Statement ");
+			e.printStackTrace();
+		}finally {
+			try { connection.close();
+			} catch (SQLException e) { ServiceUtils.logger.error("Erreur close connexion"); e.printStackTrace(); }
+		}
+		
+		return res;
+	}
 	
 	
 	
