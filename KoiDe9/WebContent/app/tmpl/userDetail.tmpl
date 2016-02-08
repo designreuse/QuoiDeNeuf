@@ -1,15 +1,33 @@
-<h4>Détail profil de ##usrNom##</h4>
-<hr/>
-	<div class="col-md-4 text-center form-group">
-		<br/>
-		<img id="usrAvatar" class="img-thumbnail" src='../img/avatars/##usrPhoto##' alt="Avatar de ##login##" />
-	
-	</div>
-	<div class="col-md-8 form-group">
-	<div><label>Login : </label><input type="text" class="form-control" value='##usrLogin##' readonly="readonly"/></div>
-	<div><label>Nom : </label><input type="text" class="form-control" value='##usrNom##' readonly="readonly"/></div>
-	<div><label>Email : </label><input type="text" class="form-control" value='##usrNom##' readonly="readonly"/></div>
-	<div><label>Description : </label><input type="text" class="form-control" value='##usrDescription##' readonly="readonly"/></div>
-	
-	</div>
+ <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <div class="modal-content">
+        <div class="modal-header success">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Détail profil de ##usrNom##</h4>
+        </div>
+        <div id="modDetailsUsr" class="clearfix modal-body" style="padding:40px 50px;">
+                <div class="col-md-4  text-center">
+	<img id="usrAvatar" class="img-thumbnail" src='../img/avatars/##usrPhoto##' alt="Avatar de ##login##" />
+        </div>
+<div class="col-md-8 form-group">
+	<h1 class="form-control">Login : ##usrLogin##</h1>
+	<h1 class="form-control">Nom : ##usrNom##</h1>
+	<h1 class="form-control">Email : ##usrEmail##</h1>
+	<h1 class="form-control">Description : ##usrDescription##</h1>
 
+</div> 
+
+        </div>
+        
+        
+        
+      <div class="modal-footer">
+      <h4 class="text-left">Amis : </h4>
+			<div id="detailZoneAmis"></div> 
+        </div>
+
+      </div>
+      
+    </div>
+  </div>

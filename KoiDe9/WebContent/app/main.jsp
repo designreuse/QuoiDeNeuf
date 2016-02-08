@@ -7,8 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <title>QuoiDeNeuf - Main</title>
-<meta name="QuoiDeNeuf"
-	content="QuoiDeNeuf? SYSTEME DE MESSAGERIE INSTANTANEE">
+<meta name="QuoiDeNeuf" content="QuoiDeNeuf? SYSTEME DE MESSAGERIE INSTANTANEE">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="../css/bootstrap.min.css">
 <link rel="stylesheet" href="../css/perso.css">
@@ -22,6 +21,7 @@
 			</div>
 			<div>
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#" data-toggle="popover" data-placement="bottom" data-content="Defaut">Theme</a></li>
 					<li></li>
 					<li><a href="../index.jsp?deconnexion=oui"> <span
 							id="seDeco"></span> Se déconnecter
@@ -35,12 +35,12 @@
 
 	<div class="clearfix container main mainDiag">
 		<button type="button" class="col-md-2 btn btn-success" name="showprofil" id="showprofil"><span class="glyphicon glyphicon-user"></span> Mon Profil</button>
-		<button type="button" class="col-md-2 btn btn-success" name="showGrps" id="showGrps" value="Mes groupes" ><span class="glyphicon glyphicon glyphicon-list-alt"></span> Mes groupes</button>
-		<button type="button" class="col-md-3 btn btn-success" name="addnewusers" id="addnewusers" ><span class="glyphicon glyphicon glyphicon-search"></span> Trouver des utilisateurs</button>
+		<button type="button" class="col-md-2 btn btn-success" name="showGrps" id="showGrps" value="Mes groupes" ><span class="glyphicon glyphicon-list-alt"></span> Mes groupes</button>
+		<button type="button" class="col-md-3 btn btn-success" name="addnewusers" id="addnewusers" ><span class="glyphicon glyphicon-search"></span> Trouver des utilisateurs</button>
 		<div class="mainc">
 			<div id="card">
 				<div class="col-xs-12 front" id="front">
-					<div class="mainUserPhoto">
+					<div class="col-md-12 mainUserPhoto">
 						<img src='../img/avatars/${sessionScope["dejaConnecte"].photo}'
 							alt="Avatar de l'utilisateur" />
 						<blockquote>
@@ -105,7 +105,7 @@
 									</div>
 									<br />
 									<div class="form-group text-right">
-										<input type="button" id="btnReset" class="btn btn-default" value="Reset" />
+										<input type="reset" id="btnReset" class="btn btn-default" />
 										<input type="submit" id="btnAppliquer" class="btn btn-warning" value="Appliquer" />
 									</div>
 								</div>
@@ -120,7 +120,7 @@
 		<div class="input-group">
 			<input type="search" class="form-control" id="nomRecherche" placeholder="Nom ou login d'un utilisateur">
 			<span class="input-group-btn">
-				<button id="rechercherBtn" class="btn btn-primary" type="button">Rechercher</button>
+				<button id="rechercherBtn" class="btn btn-info" type="button">Rechercher</button>
 			</span>
 		</div>
 	<br />
@@ -138,17 +138,27 @@
 		
 	</div>
 	<div class="container main2 mainDiag" id="mygroups" style="display: none;">
-		<div class="clearfix" id="groupeZone">
-			<div id="errorZoneGrp"></div>
-			<div class="col-md-12">
-				<h4>Mes groupes</h4>
-				<div id="groupeListe"></div>
+		<div class="clearfix innerZone" >
+			<div class="col-md-12" id="errorZoneGrp"></div>
+			<div class="col-md-11"><h4> Mes groupes</h4></div>
+			<div class="col-md-1 text-right"><button type="button" id="showAddGrp" class="btn btn-default btn-xs btnxss "><span id="arrow" class="glyphicon glyphicon-chevron-down"></span></button></div>	
+			<div class="col-md-12 table-responsive">
+				<div id="crGrpDiv" style="display: none;">
+					<div class="input-group"> <span class='input-group-btn'> <button id='creerGrpBtn' class='btn btn-primary btn-sm' type='button'>Créer un nouveau groupe</button> </span> <input type='text' class='form-control input-sm' id='libelleGrp' placeholder='Libelle du groupe'> </div>
+				</div>
+				<table class="table table-condensed" id="groupeListe"></table>
 			</div>
-			<div class="col-md-12" id="detailZone" style="display: none;"></div>
+			<div class="col-md-12" id="detailZone" ></div>
 		</div>
 	</div>
 
-
+	<div class="container main2 mainDiag" id="myChat">
+			<div class="clearfix innerZone" >
+			<div class="col-md-11"><h4> Mes Discussions</h4></div>
+		<div id="chatZone"></div>
+		</div>
+	</div>
+		
 
 <script src="../js/vendor/jquery-1.12.0.min.js"></script>
 <script src="../js/vendor/jquery.validate.min.js"></script>
@@ -158,110 +168,100 @@
 
 <script>
 	$('#modUserForm').submit(false);
-	var submitBtn = $("#btnAppliquer");		
 	var rechercherUsrBtn = $("#addnewusers");
 	var afficherProfilBtn = $("#showprofil");
+	var applyUpdateBtn = $("#btnAppliquer");		
 	var rechercherBtn = $("#rechercherBtn");
-	var listeGroupes = [];
 	var uparent = '${sessionScope["dejaConnecte"].numu}';
+	var mesGroupes = [];
 	
 	
-
+	// Recuperer les groupes de usr
 	var getListeGroupes = function(){
-		submitBtn.disabled = true;
-		var obj = {
-			nomService : "GetListeGroupe",
-			data : { numu : '${sessionScope["dejaConnecte"].numu}' }
-		};
+		var obj = { nomService : "GetListeGroupe", data : { numu : uparent } };
 		
-		services.call(obj, function(data) {
-			submitBtn.disabled = false;	
-			var reponse = JSON.parse(data.responseText);
-			
+		services.call(obj, true).then(function(reponse) {
 			if(reponse){
 				if(reponse.returnCode === 8){
 					services.showErrorAlert("errorZoneGrp", reponse.message);
 				}else{
-					var res = "<table class='table'>";
+					mesGroupes = reponse.response;
+					
+					var res = "";
+					
+					//var res = "<tr><td><button type='button' id='creerGrpBtn' class='btn btn-info btn-sm btn-block'>Créer le groupe <span class='glyphicon glyphicon glyphicon-plus'></span></button></td><td></td></tr>";
 					if(reponse.returnCode === 4){
 						services.showErrorAlert("errorZoneGrp", reponse.message);						
 					}
-					listeGroupes = reponse.response;
 					$.each(reponse.response, function(i, obj){
-						res += "<tr><td><strong>" +obj.libelle+ "</strong></td><td id=lsUsrs_" +obj.idgrp+ "></td></tr>";	
+						var lib = obj.libelle.length > 17 ? obj.libelle.substring(0,17)+"..." : obj.libelle ;
+						var btn = "<button type='button' id='supp_" +obj.idgrp+ "' onclick='delGrp("+obj.idgrp+")' class='btn btn-default  btn-xs btn-block'>" +lib+ " <span class='glyphicon glyphicon-remove'></span></button>";
+						res += "<tr><td class='col-md-2' style='border-right: 2px dashed #CCC;'>"+btn+"</td><td class='col-md-10' id=lsUsrs_" +obj.idgrp+ "></td></tr>";	
 						getListeUsrGroupes(obj.idgrp);
-						
-							
 					});
-					res += "</table>";
 					$("#groupeListe").html(res).hide().fadeIn(600);
-					
 				}
 			}
-		}, true);
+		});
 	};
 
-
+	// Permet de recuperer la liste des utilisateurs d'un groupe
 	var getListeUsrGroupes = function(id){
 		var obj = {
 			nomService : "GetListeUtilisateursGroupe",
 			data : {
-				uparent : '${sessionScope["dejaConnecte"].numu}',
+				uparent : uparent,
 				idgrp	: id
 			}
 		};
 		
-		services.call(obj, function(data) {
-			var resp = JSON.parse(data.responseText);
-			
-			if(resp){
-				if(resp.returnCode === 8){
-					services.showErrorAlert("errorZoneGrp", resp.message);
+		services.call(obj, true).then(function(reponse) {
+			if(reponse){
+				if(reponse.returnCode === 8){
+					services.showErrorAlert("errorZoneGrp", reponse.message);
 				}else{
-					if(resp.returnCode === 4){
-						$("#lsUsrs_"+id).html(resp.message);
-												
+					if(reponse.returnCode === 4){
+						$("#lsUsrs_"+id).html(reponse.message);
 					}else{
-						
-					var res = "";
-					$.each(resp.response, function(i, obj){
-						var nom = obj.nom || obj.login;
-						var idUsr = "usr_" +id+ "_" +obj.numu;
-						var img = "../img/avatars/" +obj.photo;
-						$.get("tmpl/user.tmpl").success(function(contenu){
-							res += contenu.replace(/##idUsr##/g, idUsr)
-							.replace(/##img##/g, img)
-							.replace(/##nom##/g, nom)
-							.replace(/##description##/g, obj.description);
-						
-							$("#lsUsrs_"+id).html(res);
-	
+						$.each(reponse.response, function(i, obj){
+							var idUsr = "usr_" +id+ "_" +obj.numu;
+							var nom = obj.nom || obj.login;
+							var img	= "../img/avatars/" +obj.photo;
+							
+							$.get("tmpl/user.tmpl").success(function(contenu){
+								var res = contenu
+								.replace(/##idUsr##/g, idUsr)
+								.replace(/##img##/g, img)
+								.replace(/##nom##/g, nom)
+								.replace(/##description##/g, obj.description || "-");
+								
+								$("#lsUsrs_"+id).append(res);	
+							});
 						});
-					});
 					}
 				}
 			}
-		}, true);
+		});
 	};
 
 	
 //Update du profil
 	var updateprofil = function(){
-		submitBtn.disabled = true;
+		applyUpdateBtn.disabled = true;
 		var obj = {
 		nomService : "UpdateUtilisateur",
 			data : {
-				nom : encodeHtmlEntity($("#login").val()),
-				mdp : encodeHtmlEntity($("#mdp").val()),
-				email : encodeHtmlEntity($("#email").val()),
+				nom 	: encodeHtmlEntity($("#login").val()),
+				mdp 	: encodeHtmlEntity($("#mdp").val()),
+				email 	: encodeHtmlEntity($("#email").val()),
 				description : encodeHtmlEntity($("#description").val())
 			}
 		};
 		services.showErrorAlert("errorZone", "TODO Update utilisateur");
-		submitBtn.disabled = false;
+		applyUpdateBtn.disabled = false;
 		/*
 		services.call(obj, function(data) {
-			submitBtn.disabled = false;	
+			applyUpdateBtn.disabled = false;	
 			var resp = JSON.parse(data.responseText);
 		    //$("#out").val(data.responseText);
 			console.log(data.responseText + " | " + resp);
@@ -280,228 +280,326 @@
 
 	//Validation avant update profil	
 	var validerFormprofil = function(){
-		$("#modUserForm").validate(
-				{
-					rules : {
-						email : { required : true, email : true },
-						mdp 	: { required : true, minlength : 3 }
-					},
-					messages : {
-						email : "Le champ email est requis.",
-						mdp 	: {
-							required : "Le champ mot de passe est requis.",
-							minlength : "Taille minimale de 3."
-						}
-					},
-					errorClass : "invalid",
-					submitHandler : updateprofil
-				})
+		$("#modUserForm").validate({
+			rules : {
+				email : { required : true, email : true },
+				mdp 	: { required : true, minlength : 3 }
+			},
+			messages : {
+				email : "Le champ email est requis.",
+				mdp 	: {
+					required : "Le champ mot de passe est requis.",
+					minlength : "Taille minimale de 3."
+				}
+			},
+			errorClass : "invalid",
+			submitHandler : updateprofil
+		})
 	}; 	
 					
 					
 					
 			
 
-
+	// Permet d'envoyer un message a un autre utilisateur
+	var msgUsr = function(id, nom){
+		var idgrp = id.split("_")[1];
+		var numu = id.split("_")[2];
+		var id = getDiscussionID(uparent, numu);
+		if(!id){
+			id = "disc_"+uparent+"_"+numu;
+			var tmpl = '<div id="##idDisc##" class="discussion"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div><div class="bas" id="bas_##idDisc##" style="display: none;"><table class="table corps"> <tr><td class="col-md-2 participants">toto</td><td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td></tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"><button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button></span> </div></div></div>';
+			var res = tmpl.replace(/##idDisc##/g, id).replace(/##titre##/g, "<h4> <span class='glyphicon glyphicon-align-left'></span> Discussion : Moi - " + nom + "</h4>");
+			$("#chatZone").append(res);	
+			$("#entete_"+id).on("click", function() {
+				$("#bas_"+id).slideToggle("slow");
+			});
+		}
 		
-
 		
+	};
 		
-
+	// Pemet de consolter le profil d'un usr
+	var viewUsr = function(id){
+		var idgrp = id.split("_")[1];
+		var numu = id.split("_")[2];
 		
+		var obj = { nomService : "LireUtilisateur", data : { numu : numu } };
+		var infos = {};
 		
-		
-			
-			
-		
-
-
-			
-
-		var msgUsr = function(id){
-			var idgrp = id.split("_")[1];
-			var numu = id.split("_")[2];
-			
-			alert("message pour l'utilisateur " +numu+ " du groupe " + idgrp);
-		};
-		
-		var viewUsr = function(id){
-			var idgrp = id.split("_")[1];
-			var numu = id.split("_")[2];
-			
-			var obj = {
-					nomService : "LireUtilisateur",
-					data : {
-						numu : numu
-					}
-				};
-				services.call(obj, function(data) {
-					var resp = JSON.parse(data.responseText);
+		var res ="";
+		var el;
+		services.call(obj, true).then(function(resp) {
+			if(resp){
+				if(resp.returnCode === 8 || resp.returnCode === 4){
+					services.showErrorAlert("errorZoneGrp", resp.message);
+				}else{
+					infos = resp.response[0];
 					
-					if(resp){
-						if(resp.returnCode === 8 || resp.returnCode === 4){
-							services.showErrorAlert("errorZoneGrp", resp.message);
-						}else{
-							var infos = resp.response[0];
-							var res ="";
-							console.log(infos);
-							$.get("tmpl/userDetail.tmpl").success(function(contenu){
-								res += contenu.replace(/##usrLogin##/g, infos.login)
-								.replace(/##usrPhoto##/g, infos.photo)
-								.replace(/##usrNom##/g, infos.nom)
-								.replace(/##usrDescription##/g, infos.description);
-									
-								$("#detailZone").html(res);
-								$("#detailZone").slideToggle(400, "swing");
-							});
-							
-						}	
-					}
-				}, true);
-
-			
-		};
-		
-		var delUsr = function(id){
-			var obj = {
-					nomService : "SupprimerUtilisateurDunGroupeService",
-					data : {
-						uparent : uparent,
-						ufils : id.split("_")[2],
-						idgrp : id.split("_")[1]
-					}
-				};
-				services.call(obj, function(data) {
-					var resp = JSON.parse(data.responseText);
+					$.get("tmpl/userDetail.tmpl").success(function(contenu){
+						res += contenu.replace(/##usrLogin##/g, infos.login)
+						.replace(/##usrPhoto##/g, infos.photo)
+						.replace(/##usrNom##/g, infos.nom)
+						.replace(/##usrEmail##/g, infos.email)
+						.replace(/##usrDescription##/g, infos.description);
+					});
 					
-					if(resp){
-						if(resp.returnCode === 8 || resp.returnCode === 4){
-							services.showErrorAlert("errorZoneGrp", resp.message);
+					console.log(res);
+				}	
+			}
+			}).then(function(e) {
+				var obj = { nomService : "GetListeAmisUtilisateurService", data : { numu : infos.numu  } };
+				services.call(obj, true).then(function(respAmis) {
+					if(respAmis){
+						if(respAmis.returnCode === 8){
+							services.showErrorAlert("errorZoneGrp", respAmis.message);
 						}else{
-							//services.showErrorAlert("errorZoneGrp", resp.message, "success");
-							getListeGroupes();
-						}	
+							$("#detailZone").html(res);
+							if(respAmis.returnCode === 4){
+								$("#detailZoneAmis").append("<div class='col-md-12 text-left'><small>"+respAmis.message+"</small></div>");
+							}else{
+								var amis = respAmis.response[0];
+								$.each(respAmis.response, function(i, a){
+									$("#detailZoneAmis").append("<div class='col-md-2 amisthumb small'><div class='text-center'><img src='../img/avatars/" +a.photo+ "' /></div><p class='text-center'>"+a.nom+"</p></div>")	;
+								});
+							}
+							$("#myModal").modal();
+						}
 					}
-				}, true);
-		};
-		
-		
-		
-		
-		
-		var addUsr = function(usrToAdd){
-			var sel = $("#sel_"+usrToAdd);
-			var idgrp = sel.val();
-			
-			var obj = {
-					nomService : "AjouterUtilisateurDansGroupe",
-					data : {
-						uparent : uparent,
-						ufils : usrToAdd,
-						idgrp : sel.val()
-					}
-				};
-				services.call(obj, function(data) {
-					var resp = JSON.parse(data.responseText);
-					
-					if(resp){
-						if(resp.returnCode === 8 || resp.returnCode === 4){
-							services.showErrorAlert("errorZoneRecherche", resp.message);
-						}else{
-							services.showErrorAlert("errorZoneRecherche", resp.message, "success");
-							getListeGroupes();
-						}	
-					}
-				}, true);
-			
-			
-			
-			
-			
-		};
-		
-		
-		
-	
-		
-		
-		
-		
-		
-		// Gestion Recherche
- var rechercherUtilisateurs = function(){
-	var obj = {
-      nomService: "RechercherUtilisateur",
-      data: {
-          nom: $('#nomRecherche').val()
-      }
-		};
-	
-rechercherBtn.prop('disabled', true);	
-services.call(obj,function(data){
-  var reponse = JSON.parse(data.responseText);
-  $("#errorZone").html("");
-  $("#tableUsers").html("");
-  if(reponse){
-   	rechercherBtn.prop('disabled', false);
-      if(reponse.returnCode == 8){
-          services.showErrorAlert("errorZone", reponse.message);
-      }else if(reponse.returnCode == 4){    
-          services.showErrorAlert("errorZone", reponse.message, "warning");
-      }else{
-      	
-      	
-      	
-          var table=$("#tableUsers");
-          var res = "<tr><th></th><th class='text-center'>Login</th><th class='text-center'>Nom</th><th class='text-center'>Email</th><th></th></tr>";
-          $.each(reponse.response,function(i,o){
-          	
-          	$.get("./tmpl/rowRecherche.tmpl").success(function(contenu){
-				res = contenu.replace(/##idUsr##/g, o.numu)
-							.replace(/##login##/g, o.login)
-							.replace(/##nom##/g, o.nom)
-							.replace(/##email##/g, o.email)
-							.replace(/##photo##/g, "../img/avatars/" + o.photo);
-				
-				
-				
-				$("#tableUsers").append(res);
-				$.each(listeGroupes, function(key, value) {  
-					console.log(key + " : " + value);
-			     $('#sel_'+o.numu)
-			         .append($("<option></option>")
-			         .attr("value",value.idgrp)
-			         .text(value.libelle)); 
 				});
 			});
-          	
-          });
-				
-          $("#tableUsers").html(res);
-          
-      }
-  }
-},true);
-};
+	};
+
+	// Permet de supprimer un usr
+	var delUsr = function(id){
+		var obj = {
+			nomService : "SupprimerUtilisateurDunGroupeService",
+			data : {
+				uparent : uparent,
+				ufils : id.split("_")[2],
+				idgrp : id.split("_")[1]
+			}
+		};
+		services.call(obj, true).then(function(resp) {
+			if(resp){
+				if(resp.returnCode === 8 || resp.returnCode === 4){
+					services.showErrorAlert("errorZoneGrp", resp.message);
+				}else{
+					getListeGroupes();
+				}	
+			}
+		});
+	};
+		
+		
+		
+		
+	// Permet d'ajouter un usr a un groupe	
+	var addUsr = function(usrToAdd){
+		var sel = $("#sel_"+usrToAdd);
+		var idgrp = sel.val();
+		
+		var obj = {
+			nomService : "AjouterUtilisateurDansGroupe",
+			data : {
+				uparent : uparent,
+				ufils : usrToAdd,
+				idgrp : sel.val()
+			}
+		};
+		services.call(obj, true).then(function(resp) {
+			if(resp){
+				if(resp.returnCode === 8 || resp.returnCode === 4){
+					services.showErrorAlert("errorZoneRecherche", resp.message);
+				}else{
+					services.showErrorAlert("errorZoneRecherche", resp.message, "success");
+					getListeGroupes();
+				}	
+			}
+		});
+	};
+		
+		
+		
+	
+	// Permet de supprimer un usr
+	var delGrp = function(idgrp){
+		var obj = {
+			nomService : "SupprimerGroupeUtilisateurService",
+			data : {
+				uparent : uparent,
+				idgrp : idgrp
+			}
+		};
+		services.call(obj, true).then(function(resp) {
+			if(resp){
+				if(resp.returnCode === 8 || resp.returnCode === 4){
+					services.showErrorAlert("errorZoneGrp", resp.message);
+				}else{
+					services.showErrorAlert("errorZoneGrp", resp.message, "success");
+					getListeGroupes();
+				}	
+			}
+		});
+	};	
+		
+		
+	// Permet de creer un groupe
+	var creerGrp = function(){		
+		 
+		 var obj = { nomService : "EnregistrerGroupe", data : { libelle : encodeHtmlEntity($("#libelleGrp").val()) } };
+		 var newGrp;
+		services.call(obj, true).then(function(resp) {
+			if(resp){
+				if(resp.returnCode === 8 || resp.returnCode === 4){
+					services.showErrorAlert("errorZoneGrp", resp.message);
+				}else{
+					newGrp = resp.response[0];
+					obj = { nomService : "AjouterGroupeUtilisateurService", data : { numu : uparent, idgrp : newGrp.idgrp } };
+					services.call(obj, true).then(function(resp) {
+						if(resp.returnCode === 8 || resp.returnCode === 4){
+							services.showErrorAlert("errorZoneGrp", resp.message);
+						}else{
+							getListeGroupes();
+						}
+					});
+					
+					
+				}	
+			}
+		}); 
+	};	
+			
+	
+	
+	
+	
+	
+	
+	// Gestion de la Recherche
+	 var rechercherUtilisateurs = function(){
+		var obj = { nomService: "RechercherUtilisateur", data: { nom: $('#nomRecherche').val() } };
+		rechercherBtn.prop('disabled', true);	
+		var res = "";
+		services.call(obj, true).then(function(reponse){
+	  		$("#errorZone").html("");
+	  		$("#tableUsers").html("");
+	  		rechercherBtn.prop('disabled', false);
+	  		if(reponse){ 
+	   			if(reponse.returnCode == 8)		{ services.showErrorAlert("errorZone", reponse.message); }
+	      		else if(reponse.returnCode == 4){ services.showErrorAlert("errorZone", reponse.message, "warning"); autoHeight($("#resultatRechZone")); }
+	      		else {
+	          		var table=$("#tableUsers");
+	          		var res = "<tr><th></th><th class='text-center'>[ LOGIN ]</th><th class='text-center'>[ NOM ]</th><th class='text-center'>[ EMAIL ]</th><th >[ ACTION ]</th></tr>";
+	          		$("#tableUsers").append(res);
+	          		$.each(reponse.response,function(i,o){
+		          		$.get("./tmpl/rowRecherche.tmpl").success(function(contenu){
+							res = contenu.replace(/##idUsr##/g, o.numu) .replace(/##login##/g, o.login) .replace(/##nom##/g, o.nom) .replace(/##email##/g, o.email) .replace(/##photo##/g, "../img/avatars/" + o.photo);
+							$("#tableUsers").append(res);
+							$.each(mesGroupes, function(key, value) {  
+					     		$('#sel_'+o.numu) .append($("<option></option>") .attr("value",value.idgrp) .text(value.libelle));
+							});
+							autoHeight($("#resultatRechZone"));
+						});
+	          		});
+	      		}
+	  		}
+		})
+	};
 
 rechercherBtn.on("click",rechercherUtilisateurs);
-$("#nomRecherche").on("keyup",rechercherUtilisateurs);
+$("#nomRecherche").on("keyup", rechercherUtilisateurs );
+		
+var autoHeight = function autoHeightAnimate(element){
+	var curHeight = element.height(), // Get Default Height
+	autoHeight = element.css('height', 'auto').height(); // Get Auto Height
+	element.height(curHeight); // Reset to Default Height
+	element.stop().animate({ height: autoHeight }, 300); // Animate to Auto Height
+};		
+		 
+		
+	// Permet de supprimer un usr
+	var dernierMsg;
+	var getAllMsg = function(){
+		var obj = {
+			nomService : "RecupererTousLesMessageService",
+			data : {
+				udest : uparent,
+				idmsg : dernierMsg
+			}
+		};
+		services.call(obj, true).then(function(resp) {
+			if(resp){
+				if(resp.returnCode === 0){
+					//$('div[id^="dialog_"]').html("");
+					$.each(resp.response,function(i,o){
+						var exp = o.uexp;
+						var dest = o.udest;
+						var date = o.dateenv;
+						var id = getDiscussionID(exp,dest);
+						if(!id){
+							id = "disc_"+exp+"_"+dest;
+							var tmpl = '<div id="##idDisc##" class="discussion fermee"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div><div class="bas" id="bas_##idDisc##" style="display: none;"><table class="table corps"> <tr><td class="col-md-2 participants text-center"><div class="col-md-12"><img src="../img/avatars/'+o.utilisateur.photo+'" alt="'+o.utilisateur.nom+'"/><h4>'+o.utilisateur.nom+'</h4></div><div class="col-md-12"><img src="../img/avatars/${sessionScope["dejaConnecte"].photo}" alt="${sessionScope["dejaConnecte"].nom}"/><h4>${sessionScope["dejaConnecte"].nom}</h4></div></td><td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td></tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"><button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button></span> </div></div></div>';
+							var res = tmpl.replace(/##idDisc##/g, id).replace(/##titre##/g, "<div class='col-md-10'><h4> <span class='glyphicon glyphicon-align-left'></span> Discussion : Moi - " + o.utilisateur.nom + "</h4></div><div id='notif_"+id+"' class='col-md-2 hidden'><i class='badge'><span class='glyphicon glyphicon-bell'></span> Nouveau message ! </i></div>");
+							$("#chatZone").append(res);
+							$("#entete_"+id).on("click", function() {
+								$("#bas_"+id).slideToggle("slow");
+								$("#"+id).toggleClass("fermee");
+								$("#notif_"+id).addClass("hidden");
+							});
+							
+						}
+						var msg = "";
+						if(exp == uparent){
+							msg = "<div class='col-md-12' id='msg_"+o.idmsg+"'><div class='col-md-6 alert mesMsg pull-right'><strong>Moi : </strong><small>"+date +"</small><hr/>"+ o.contenu + "</div></div>"
+						}else{
+							msg = "<div class='col-md-12' id='msg_"+o.idmsg+"'><div class='col-md-6 alert autreMsg'><strong>"+o.utilisateur.nom+" : </strong><small>"+date +"</small><hr/>"+ o.contenu + "</div></div>"
+						}
+						$("#dialog_"+id).append(msg);
+						$('#msg_'+o.idmsg).hide().fadeIn("slow");
+						if($("#"+id).hasClass("fermee")){
+							$("#notif_"+id).toggleClass("hidden");
+						}
+						dernierMsg = o.idmsg;
+					});
+				}
+			}
+		});
+		//console.log("ID dernier Message = " + dernierMsg);
+	};
+	
+	var getDiscussionID = function(e,d){
+		var id = "disc_"+e+"_"+d;
+		var di = "disc_"+d+"_"+e;
+		
+		if($("#"+id).length){ return id; }
+		if($("#"+di).length){ return di; }
+		return null;
+	};
 		
 		
+	
+	
+	var envoyerMsg = function(e){
+		var id = e.id;
+		var udest = id.split("_")[3] === uparent ? id.split("_")[2] : id.split("_")[3];
+		var obj = {
+			nomService : "EnvoyerMessageUtilisateur",
+			data : {
+				uexp : uparent,					
+				udest : udest,
+				contenu : encodeHtmlEntity(e.value)
+			}
+		};
+		e.value = "";
+		console.log(obj);
+		services.call(obj, true).then(function(resp) {
+			
+		});
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	};
+	getAllMsg();
+	setInterval(getAllMsg, 3000);
 		
 			
 	// Selection d'une image pour l'upload
@@ -513,6 +611,11 @@ $("#nomRecherche").on("keyup",rechercherUtilisateurs);
 		$("#fileName").val($("#btnH").val());
 	});
 
+	$("#creerGrpBtn").on("click", function(){
+		creerGrp();
+		$("#libelleGrp").val("");
+		
+	});
 			
 			
 
@@ -520,6 +623,18 @@ $("#nomRecherche").on("keyup",rechercherUtilisateurs);
 	$("#showGrps").on("click", function() {
 		$("#showGrps").toggleClass("btn-success"); 
 		$("#mygroups").slideToggle(200, "swing");
+	});
+	
+
+	
+	
+	$("#showAddGrp").on("click", function() {
+		$("#crGrpDiv").slideToggle(400, "swing");
+		if($("#arrow").hasClass("glyphicon-chevron-down")){
+			$("#arrow").removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+		}else{
+			$("#arrow").removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
+		}
 	});
 
 	
@@ -566,7 +681,7 @@ $("#nomRecherche").on("keyup",rechercherUtilisateurs);
 	
 	
 	$(document).ready(function() {
-		
+		$('[data-toggle="popover"]').popover();   
 		validerFormprofil();
 		getListeGroupes();
 	});

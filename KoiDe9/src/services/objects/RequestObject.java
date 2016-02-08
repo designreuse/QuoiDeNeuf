@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import app.utils.ServiceUtils;
+
 public class RequestObject {
 
    	private String nomService;
@@ -39,15 +41,27 @@ public class RequestObject {
 	
 	public String getDataStringValue(String key) {
 		final JsonElement el = this.data.get(key);
-		
-		return el == null ? "" : el.getAsString();
+		try {
+			return el.getAsString();
+		}catch(UnsupportedOperationException e){
+			ServiceUtils.logger.error("Probleme de cast " + e);
+		}
+		return "";
 		
 	}
 	
 	public int getDataIntValue(String key) {
 		final JsonElement el = this.data.get(key);
-		return el == null ? null : Integer.parseInt(el.getAsString());
-		
+		if(el==null){return -1;}
+		try {
+			
+			return Integer.parseInt(el.getAsString());
+		}catch(UnsupportedOperationException e){
+			ServiceUtils.logger.error("Probleme de cast " + e);
+		}catch(NumberFormatException e){
+			ServiceUtils.logger.error("Probleme de parseInt " + e);
+		}
+		return -1;
 	}
 	
 }

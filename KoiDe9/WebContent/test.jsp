@@ -19,6 +19,8 @@
   		<option value="GetListeGroupe">GetListeGroupe</option>
   		<option value="GetListeUtilisateursGroupe">GetListeUtilisateursGroupe</option>
   		<option value="AjouterGroupeUtilisateurService">AjouterGroupeUtilisateurService</option>
+  		<option value="EnvoyerMessageUtilisateur">EnvoyerMessageUtilisateur</option>
+  		<option value="RecupererMessageUtilisateur">RecupererMessageUtilisateur</option>
 	</select>
 	<input type="button" value="envoyer" id="btn"/>
 	</div>
@@ -44,7 +46,7 @@
 $("#btn").on("click", function(){
 	var obj = { 
 			nomService: $( "#svc" ).val(), 
-			data: {
+/* 			data: {
 				libelle : "",
 				numu: 1,
 				nom: "",
@@ -55,6 +57,12 @@ $("#btn").on("click", function(){
 				recherche : "23",
 				uparent : 1,
 				idgrp: 4
+			} */
+			data : {
+				uexp : 1,
+				udest : 3,
+				contenu : "Hello my friend!"
+				
 			}
 	}; 
 
