@@ -84,6 +84,31 @@ public class MappingBddToBeans {
 	
 	
 	
+	public static List<Discussion> resultsetToListDiscussionGroupe(ResultSet rs) throws SQLException {
+		final List<Discussion> liste = new ArrayList<Discussion>();
+
+		while(rs.next()){
+			final Discussion discussion = new Discussion();
+			final Utilisateur utilisateur = new Utilisateur();
+			discussion.setIdmsg(rs.getInt(TabAndCo.MESSAGES_IDMSG));
+			discussion.setDateenv(rs.getTimestamp(TabAndCo.MESSAGES_DATEENV));
+			discussion.setUexp(rs.getInt(TabAndCo.USER_TO_USER_UEXP));
+			discussion.setUdest(rs.getInt(TabAndCo.USER_TO_USER_UDEST));
+			discussion.setContenu(rs.getString(TabAndCo.MESSAGES_CONTENU));
+			
+			utilisateur.setNumu(rs.getInt(TabAndCo.USERS_NUMU));
+			utilisateur.setLogin(rs.getString(TabAndCo.USERS_LOGIN));
+			utilisateur.setNom(rs.getString(TabAndCo.USERS_NOM));
+			utilisateur.setPhoto(rs.getString(TabAndCo.USERS_PHOTO));
+			utilisateur.setDescription(rs.getString(TabAndCo.USERS_DESCRIPTION));
+			
+			discussion.setUtilisateur(utilisateur);
+			liste.add(discussion);
+		}
+		return liste;
+	}
+	
+	
 	
 	
 }

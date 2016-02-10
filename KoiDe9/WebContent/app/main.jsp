@@ -146,7 +146,7 @@
 				<div id="crGrpDiv" style="display: none;">
 					<div class="input-group"> <span class='input-group-btn'> <button id='creerGrpBtn' class='btn btn-primary btn-sm' type='button'>Créer un nouveau groupe</button> </span> <input type='text' class='form-control input-sm' id='libelleGrp' placeholder='Libelle du groupe'> </div>
 				</div>
-				<table class="table table-condensed" id="groupeListe"></table>
+				<table class="table" id="groupeListe"></table>
 			</div>
 			<div class="col-md-12" id="detailZone" ></div>
 		</div>
@@ -199,7 +199,7 @@
 						res += "<tr><td class='col-md-2' style='border-right: 2px dashed #CCC;'>"+btn+"</td><td class='col-md-10' id=lsUsrs_" +obj.idgrp+ "></td></tr>";	
 						getListeUsrGroupes(obj.idgrp);
 					});
-					$("#groupeListe").html(res).hide().fadeIn(600);
+					$("#groupeListe").html(res).hide().fadeIn(100);
 				}
 			}
 		});
@@ -313,6 +313,11 @@
 			$("#chatZone").append(res);	
 			$("#entete_"+id).on("click", function() {
 				$("#bas_"+id).slideToggle("slow");
+			});
+			$("#msg_"+id).keypress(function(e) {
+				if(e.which == 13) {
+					envoyerMsg(document.getElementById("msg_"+id));
+				}
 			});
 		}
 		
@@ -599,7 +604,7 @@ var autoHeight = function autoHeightAnimate(element){
 		
 	};
 	getAllMsg();
-	setInterval(getAllMsg, 3000);
+	setInterval(getAllMsg, 300);
 		
 			
 	// Selection d'une image pour l'upload

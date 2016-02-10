@@ -5,9 +5,11 @@ import services.groupe.EnregistrerGroupeService;
 import services.groupe.GetListeUtilisateursGroupeService;
 import services.groupe.SupprimerGroupeUtilisateurService;
 import services.groupe.SupprimerUtilisateurDunGroupeService;
+import services.message.EnvoyerMessageGroupeService;
 import services.message.EnvoyerMessageUtilisateur;
 import services.message.RecupererMessageUtilisateur;
 import services.message.RecupererTousLesMessageService;
+import services.message.RecupererTousLesMessagesGroupesService;
 import services.utilisateur.AjouterUtilisateurDansGroupe;
 import services.utilisateur.EnregistrerUtilisateurService;
 import services.utilisateur.GetListeAmisUtilisateurService;
@@ -36,6 +38,8 @@ public class ServiceFactory {
         	case "EnvoyerMessageUtilisateur"	: return new EnvoyerMessageUtilisateur();
         	case "RecupererMessageUtilisateur"	: return new RecupererMessageUtilisateur();
         	case "RecupererTousLesMessageService"	: return new RecupererTousLesMessageService();
+        	case "EnvoyerMessageGroupeService"	: return new EnvoyerMessageGroupeService();
+        	case "RecupererTousLesMessagesGroupesService"	: return new RecupererTousLesMessagesGroupesService();
         
         	default : return null;
         }

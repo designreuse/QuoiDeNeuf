@@ -44,6 +44,13 @@ public class TabAndCo {
 	public static final String MESSAGES_IDMSG   = "idmsg";
 	final public static String MESSAGES_DATEENV = "dateenv";
 	public static final String MESSAGES_CONTENU = "contenu";
+	
+	
+	//Table usertogroup ======================================================
+	public static final String TABLE_USERTOGROUP  = "usertogroup"; 
+	public static final String USER_TO_GROUP_UEXP = "uexp";
+	public static final String USER_TO_GROUP_IDGRPDEST = "idgrpdest";
+	public static final String USER_TO_GROUP_IDMSG = "idmsg";
 
 	
 	public static String[] getRequiredFields(final String table){
