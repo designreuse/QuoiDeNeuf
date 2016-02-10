@@ -224,12 +224,13 @@ input[type=radio]:checked + label:before {
 }
 
 .participants img {
-		width: 96px;
-    height: 96px;
+	width: 82px;
+    height: 82px;
     border-radius: 50px;
     margin: 5px;
     background: #ecf0f1;
     padding: 10px;
+    border: 4px solid #8b969c;
     box-shadow: 1px 1px 1px 1px #4f4f4f;
 }
 
@@ -286,9 +287,7 @@ input[type=radio]:checked + label:before {
 	color: white;
 }
 
-.discussion {
-	margin-bottom: 20px;
-}
+
 
 
 .mesMsg {
@@ -318,4 +317,8 @@ input[type=radio]:checked + label:before {
 
 .corps {
 	overflow: scroll;
+}
+
+.entete:HOVER{
+	background: #BDC3C7;
 }

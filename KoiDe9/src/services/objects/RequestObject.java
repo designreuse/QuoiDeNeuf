@@ -41,6 +41,7 @@ public class RequestObject {
 	
 	public String getDataStringValue(String key) {
 		final JsonElement el = this.data.get(key);
+		if(el == null) return "";
 		try {
 			return el.getAsString();
 		}catch(UnsupportedOperationException e){

@@ -16,6 +16,7 @@ import services.utilisateur.GetListeAmisUtilisateurService;
 import services.utilisateur.GetListeGroupesUtilisateur;
 import services.utilisateur.LireUtilisateurService;
 import services.utilisateur.RechercherUtilisateurService;
+import services.utilisateur.UpdateUtilisateurService;
 import services.utilisateur.VerifierUtilisateurService;
 
 public class ServiceFactory {
@@ -40,6 +41,7 @@ public class ServiceFactory {
         	case "RecupererTousLesMessageService"	: return new RecupererTousLesMessageService();
         	case "EnvoyerMessageGroupeService"	: return new EnvoyerMessageGroupeService();
         	case "RecupererTousLesMessagesGroupesService"	: return new RecupererTousLesMessagesGroupesService();
+        	case "UpdateUtilisateurService"	: return new UpdateUtilisateurService();
         
         	default : return null;
         }

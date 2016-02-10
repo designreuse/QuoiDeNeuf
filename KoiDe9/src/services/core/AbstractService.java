@@ -36,7 +36,7 @@ public abstract class AbstractService {
      */
 	protected boolean validate(final RequestObject requestObject) {
 		final JsonObject data = requestObject.getData();
-
+		if(requiredData == null) return false;
     	// Verification des champs requis
     	for(String champ : requiredData){
     		if(data.get(champ) == null || data.get(champ).getAsString().isEmpty()){

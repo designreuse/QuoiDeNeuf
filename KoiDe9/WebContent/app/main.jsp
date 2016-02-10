@@ -249,34 +249,34 @@
 	var updateprofil = function(){
 		applyUpdateBtn.disabled = true;
 		var obj = {
-		nomService : "UpdateUtilisateur",
+		nomService : "UpdateUtilisateurService",
 			data : {
-				nom 	: encodeHtmlEntity($("#login").val()),
+				numu : uparent,
+				nom 	: encodeHtmlEntity($("#nom").val()),
 				mdp 	: encodeHtmlEntity($("#mdp").val()),
 				email 	: encodeHtmlEntity($("#email").val()),
 				description : encodeHtmlEntity($("#description").val())
 			}
 		};
-		services.showErrorAlert("errorZone", "TODO Update utilisateur");
-		applyUpdateBtn.disabled = false;
-		/*
-		services.call(obj, function(data) {
-			applyUpdateBtn.disabled = false;	
-			var resp = JSON.parse(data.responseText);
-		    //$("#out").val(data.responseText);
-			console.log(data.responseText + " | " + resp);
+		services.call(obj, true).then(function(resp) {
 			if(resp){
-				if(resp.returnCode == 8){
+				if(resp.returnCode === 8 || resp.returnCode === 4){
 					services.showErrorAlert("errorZone", resp.message);
 				}else{
-					location.replace("./app/main.jsp");		    			
+					services.showErrorAlert("errorZone", resp.message, "success");
+/* 					$("#nom").val('${sessionScope["dejaConnecte"].nom}');
+					$("#email").val('${sessionScope["dejaConnecte"].email}');
+					$("#description").val('${sessionScope["dejaConnecte"].description}'); */
+					$("#backDetailUsr").fadeOut(0).fadeIn(1);
+					
+					
 				}
 			}
-		    
 		});
-		 */
+};
 
-	};
+
+	
 
 	//Validation avant update profil	
 	var validerFormprofil = function(){
@@ -308,7 +308,7 @@
 		var id = getDiscussionID(uparent, numu);
 		if(!id){
 			id = "disc_"+uparent+"_"+numu;
-			var tmpl = '<div id="##idDisc##" class="discussion"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div><div class="bas" id="bas_##idDisc##" style="display: none;"><table class="table corps"> <tr><td class="col-md-2 participants">toto</td><td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td></tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"><button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button></span> </div></div></div>';
+			var tmpl = '<div id="##idDisc##" class="col-md-12 discussion"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div><div class="bas" id="bas_##idDisc##" style="display: none;"><table class="table corps"> <tr><td class="col-md-2 participants"></td><td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td></tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"><button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button></span> </div></div></div>';
 			var res = tmpl.replace(/##idDisc##/g, id).replace(/##titre##/g, "<h4> <span class='glyphicon glyphicon-align-left'></span> Discussion : Moi - " + nom + "</h4>");
 			$("#chatZone").append(res);	
 			$("#entete_"+id).on("click", function() {
@@ -318,9 +318,15 @@
 				if(e.which == 13) {
 					envoyerMsg(document.getElementById("msg_"+id));
 				}
+				
 			});
+			
 		}
-		
+		scrollTo("#"+id);
+		$("#bas_"+id).slideDown("slow");
+		$("#"+id).removeClass("fermee");
+		$("#notif_"+id).addClass("hidden");
+
 		
 	};
 		
@@ -544,13 +550,17 @@ var autoHeight = function autoHeightAnimate(element){
 						var id = getDiscussionID(exp,dest);
 						if(!id){
 							id = "disc_"+exp+"_"+dest;
-							var tmpl = '<div id="##idDisc##" class="discussion fermee"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div><div class="bas" id="bas_##idDisc##" style="display: none;"><table class="table corps"> <tr><td class="col-md-2 participants text-center"><div class="col-md-12"><img src="../img/avatars/'+o.utilisateur.photo+'" alt="'+o.utilisateur.nom+'"/><h4>'+o.utilisateur.nom+'</h4></div><div class="col-md-12"><img src="../img/avatars/${sessionScope["dejaConnecte"].photo}" alt="${sessionScope["dejaConnecte"].nom}"/><h4>${sessionScope["dejaConnecte"].nom}</h4></div></td><td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td></tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"><button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button></span> </div></div></div>';
+							var tmpl = '<div id="##idDisc##" class="col-md-12 discussion fermee"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div><div class="bas" id="bas_##idDisc##" style="display: none;"><table class="table corps"> <tr><td class="col-md-2 participants text-center"><div class="col-md-12"><img src="../img/avatars/'+o.utilisateur.photo+'" alt="'+o.utilisateur.nom+'"/><h4>'+o.utilisateur.nom+'</h4></div><div class="col-md-12"><img src="../img/avatars/${sessionScope["dejaConnecte"].photo}" alt="${sessionScope["dejaConnecte"].nom}"/><h4>${sessionScope["dejaConnecte"].nom}</h4></div></td><td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td></tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"><button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button></span> </div></div></div>';
 							var res = tmpl.replace(/##idDisc##/g, id).replace(/##titre##/g, "<div class='col-md-10'><h4> <span class='glyphicon glyphicon-align-left'></span> Discussion : Moi - " + o.utilisateur.nom + "</h4></div><div id='notif_"+id+"' class='col-md-2 hidden'><i class='badge'><span class='glyphicon glyphicon-bell'></span> Nouveau message ! </i></div>");
 							$("#chatZone").append(res);
 							$("#entete_"+id).on("click", function() {
-								$("#bas_"+id).slideToggle("slow");
+								getAllMsg();
 								$("#"+id).toggleClass("fermee");
 								$("#notif_"+id).addClass("hidden");
+								$("#bas_"+id).slideToggle("slow", function(){
+									scrollTo("#msg_"+id);
+									
+								});
 							});
 							
 						}
@@ -691,6 +701,12 @@ var autoHeight = function autoHeightAnimate(element){
 		getListeGroupes();
 	});
 	
+	
+	var scrollTo = function (element){	
+		 $('html, body').animate({
+       scrollTop: $(element).offset().top
+     }, 1000);
+	};
 	
 	
 	

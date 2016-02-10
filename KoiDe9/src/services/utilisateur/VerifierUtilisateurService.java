@@ -23,6 +23,7 @@ import services.objects.ResponseObject;
 public class VerifierUtilisateurService extends AbstractService {
 	
 	public VerifierUtilisateurService(){
+		super();
 		this.requiredData = TabAndCo.getRequiredFields(TabAndCo.TABLE_USERS);
 	}
 	

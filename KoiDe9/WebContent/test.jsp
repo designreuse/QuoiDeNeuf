@@ -21,6 +21,7 @@
   		<option value="AjouterGroupeUtilisateurService">AjouterGroupeUtilisateurService</option>
   		<option value="EnvoyerMessageUtilisateur">EnvoyerMessageUtilisateur</option>
   		<option value="RecupererMessageUtilisateur">RecupererMessageUtilisateur</option>
+  		<option value="UpdateUtilisateurService">UpdateUtilisateurService</option>
 	</select>
 	<input type="button" value="envoyer" id="btn"/>
 	</div>
@@ -46,24 +47,25 @@
 $("#btn").on("click", function(){
 	var obj = { 
 			nomService: $( "#svc" ).val(), 
-/* 			data: {
+ 			data: {
 				libelle : "",
 				numu: 1,
-				nom: "",
-				login: "kaiji3", 
+				nom: "Kaiji le roi du survival",
+				login: "kaiji", 
 				mdp: "aaa",
-				photo: "moche",
-				description : "alors",
+				photo: "cat.png",
+				description : "Bien le bonjour",
 				recherche : "23",
 				uparent : 1,
 				idgrp: 4
-			} */
-			data : {
+			}
+/* 			data : {
 				uexp : 1,
 				udest : 3,
 				contenu : "Hello my friend!"
 				
-			}
+			} */
+
 	}; 
 
 	
