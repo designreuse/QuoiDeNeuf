@@ -31,7 +31,8 @@
 			</div>
 		</div>
 	</nav> <!-- Fin navbar -->
-
+	
+	
 
 	<div class="clearfix container main mainDiag">
 		<button type="button" class="col-md-2 btn btn-success" name="showprofil" id="showprofil"><span class="glyphicon glyphicon-user"></span> Mon Profil</button>
@@ -53,6 +54,9 @@
 				</div>
 				<div class="col-xs-12 back" id="backDetailUsr" style="display: none;">
 					<div id="errorZone"></div>
+					<form method="POST" id="myAvatarform" action="../upload" enctype="multipart/form-data">
+							<input type="file" name="fichier" id="btnH" type="file" name="fichier" class="hidden" />
+					</form>
 					<form class="form" id="modUserForm" name="modUserForm">
 						<fieldset>
 							<legend>Détails Utilisateur</legend>
@@ -67,12 +71,9 @@
 											alt="Avatar de l'utilisateur" />
 									</div>
 									<div class="form-group">
-										<input type="file" name="fileSelect" id="btnH" class="hidden" />
 										<div class="input-group btnShown">
-											<span class="input-group-btn"><input type="button"
-												id="btnP" class="btn btn-primary" value="Parcourir&#8230;" /></span>
-											<input type="text" id="fileName" class="form-control"
-												disabled />
+											<span class="input-group-btn"><input type="button" id="btnP" class="btn btn-primary" value="Parcourir&#8230;" /></span>
+											<input type="text" id="fileName" class="form-control" disabled />
 
 										</div>
 									</div>
@@ -120,7 +121,7 @@
 		<div class="input-group">
 			<input type="search" class="form-control" id="nomRecherche" placeholder="Nom ou login d'un utilisateur">
 			<span class="input-group-btn">
-				<button id="rechercherBtn" class="btn btn-info" type="button">Rechercher</button>
+				<button id="rechercherBtn" class="btn btn-primary" type="button">Rechercher</button>
 			</span>
 		</div>
 	<br />
@@ -158,7 +159,7 @@
 		<div id="chatZone"></div>
 		</div>
 	</div>
-		
+	<div class="col-md-12" id="viewImg" ></div>	
 
 <script src="../js/vendor/jquery-1.12.0.min.js"></script>
 <script src="../js/vendor/jquery.validate.min.js"></script>
@@ -174,7 +175,7 @@
 	var rechercherBtn = $("#rechercherBtn");
 	var uparent = '${sessionScope["dejaConnecte"].numu}';
 	var mesGroupes = [];
-	
+	var tmpAvatar;
 	
 	// Recuperer les groupes de usr
 	var getListeGroupes = function(){
@@ -255,7 +256,8 @@
 				nom 	: encodeHtmlEntity($("#nom").val()),
 				mdp 	: encodeHtmlEntity($("#mdp").val()),
 				email 	: encodeHtmlEntity($("#email").val()),
-				description : encodeHtmlEntity($("#description").val())
+				description : encodeHtmlEntity($("#description").val()),
+				photo : tmpAvatar
 			}
 		};
 		services.call(obj, true).then(function(resp) {
@@ -264,9 +266,9 @@
 					services.showErrorAlert("errorZone", resp.message);
 				}else{
 					services.showErrorAlert("errorZone", resp.message, "success");
-/* 					$("#nom").val('${sessionScope["dejaConnecte"].nom}');
+ 					$("#nom").val('${sessionScope["dejaConnecte"].nom}');
 					$("#email").val('${sessionScope["dejaConnecte"].email}');
-					$("#description").val('${sessionScope["dejaConnecte"].description}'); */
+					$("#description").val('${sessionScope["dejaConnecte"].description}');
 					$("#backDetailUsr").fadeOut(0).fadeIn(1);
 					
 					
@@ -308,19 +310,11 @@
 		var id = getDiscussionID(uparent, numu);
 		if(!id){
 			id = "disc_"+uparent+"_"+numu;
-			var tmpl = '<div id="##idDisc##" class="col-md-12 discussion"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div><div class="bas" id="bas_##idDisc##" style="display: none;"><table class="table corps"> <tr><td class="col-md-2 participants"></td><td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td></tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"><button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button></span> </div></div></div>';
-			var res = tmpl.replace(/##idDisc##/g, id).replace(/##titre##/g, "<h4> <span class='glyphicon glyphicon-align-left'></span> Discussion : Moi - " + nom + "</h4>");
-			$("#chatZone").append(res);	
-			$("#entete_"+id).on("click", function() {
-				$("#bas_"+id).slideToggle("slow");
-			});
-			$("#msg_"+id).keypress(function(e) {
-				if(e.which == 13) {
-					envoyerMsg(document.getElementById("msg_"+id));
-				}
-				
-			});
-			
+			var formImg = '<form method="POST" id="sendImgForm_##idDisc##" action="../upload" enctype="multipart/form-data"><input type="file" name="fichier" id="fileImg_##idDisc##" type="file" name="fichier" class="hidden" /></form>';
+			var tmpl = formImg+'<div id="##idDisc##" class="col-md-12 discussion fermee"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div><div class="bas" id="bas_##idDisc##" style="display: none;"><table class="table corps"> <tr><td class="col-md-2 participants text-center"><div class="col-md-12"><img src="../img/avatars/'+o.utilisateur.photo+'" alt="'+o.utilisateur.nom+'"/><h4>'+o.utilisateur.nom+'</h4></div><div class="col-md-12"><img src="../img/avatars/${sessionScope["dejaConnecte"].photo}" alt="${sessionScope["dejaConnecte"].nom}"/><h4>${sessionScope["dejaConnecte"].nom}</h4></div></td><td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td></tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"><button id="envoyerImg_##idDisc##" onclick="envoyerImg(##idDisc##)" class="btn btn-default" type="button"> <span class="glyphicon glyphicon-picture"></span> </button><button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button></span> </div></div></div>';
+			var res = tmpl.replace(/##idDisc##/g, id).replace(/##titre##/g, "<div class='col-md-10'><h4> <span class='glyphicon glyphicon-align-left'></span> Discussion : Moi - " + o.utilisateur.nom + "</h4></div><div id='notif_"+id+"' class='col-md-2 hidden'><i class='badge'><span class='glyphicon glyphicon-bell'></span> Nouveau message ! </i></div>");
+			$("#chatZone").append(res);
+			addDialogEvents(id);
 		}
 		scrollTo("#"+id);
 		$("#bas_"+id).slideDown("slow");
@@ -550,19 +544,12 @@ var autoHeight = function autoHeightAnimate(element){
 						var id = getDiscussionID(exp,dest);
 						if(!id){
 							id = "disc_"+exp+"_"+dest;
-							var tmpl = '<div id="##idDisc##" class="col-md-12 discussion fermee"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div><div class="bas" id="bas_##idDisc##" style="display: none;"><table class="table corps"> <tr><td class="col-md-2 participants text-center"><div class="col-md-12"><img src="../img/avatars/'+o.utilisateur.photo+'" alt="'+o.utilisateur.nom+'"/><h4>'+o.utilisateur.nom+'</h4></div><div class="col-md-12"><img src="../img/avatars/${sessionScope["dejaConnecte"].photo}" alt="${sessionScope["dejaConnecte"].nom}"/><h4>${sessionScope["dejaConnecte"].nom}</h4></div></td><td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td></tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"><button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button></span> </div></div></div>';
+							var formImg = '<form method="POST" id="sendImgForm_##idDisc##" action="../upload" enctype="multipart/form-data"><input type="file" name="fichier" id="fileImg_##idDisc##" type="file" name="fichier" class="hidden" /></form>';
+							var tmpl = formImg+'<div id="##idDisc##" class="col-md-12 discussion fermee"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div><div class="bas" id="bas_##idDisc##" style="display: none;"><table class="table corps"> <tr><td class="col-md-2 participants text-center"><div class="col-md-12"><img src="../img/avatars/'+o.utilisateur.photo+'" alt="'+o.utilisateur.nom+'"/><h4>'+o.utilisateur.nom+'</h4></div><div class="col-md-12"><img src="../img/avatars/${sessionScope["dejaConnecte"].photo}" alt="${sessionScope["dejaConnecte"].nom}"/><h4>${sessionScope["dejaConnecte"].nom}</h4></div></td><td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td></tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"><button id="envoyerImg_##idDisc##" onclick="envoyerImg(##idDisc##)" class="btn btn-default" type="button"> <span class="glyphicon glyphicon-picture"></span> </button><button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button></span> </div></div></div>';
 							var res = tmpl.replace(/##idDisc##/g, id).replace(/##titre##/g, "<div class='col-md-10'><h4> <span class='glyphicon glyphicon-align-left'></span> Discussion : Moi - " + o.utilisateur.nom + "</h4></div><div id='notif_"+id+"' class='col-md-2 hidden'><i class='badge'><span class='glyphicon glyphicon-bell'></span> Nouveau message ! </i></div>");
 							$("#chatZone").append(res);
-							$("#entete_"+id).on("click", function() {
-								getAllMsg();
-								$("#"+id).toggleClass("fermee");
-								$("#notif_"+id).addClass("hidden");
-								$("#bas_"+id).slideToggle("slow", function(){
-									scrollTo("#msg_"+id);
-									
-								});
-							});
-							
+							addDialogEvents(id);
+
 						}
 						var msg = "";
 						if(exp == uparent){
@@ -583,6 +570,65 @@ var autoHeight = function autoHeightAnimate(element){
 		//console.log("ID dernier Message = " + dernierMsg);
 	};
 	
+	var addDialogEvents = function(id){
+		$("#entete_"+id).on("click", function() {
+			getAllMsg();
+			$("#"+id).toggleClass("fermee");
+			$("#notif_"+id).addClass("hidden");
+			$("#bas_"+id).slideToggle("slow", function(){
+				scrollTo("#msg_"+id);
+				
+			});
+		});
+		$("#msg_"+id).keypress(function(e) {
+			if(e.which == 13) {
+				envoyerMsg(document.getElementById("msg_"+id));
+			}
+			
+		});
+		
+		$('#sendImgForm_'+id).on('submit', function (e) {
+		  e.preventDefault();
+			
+		  
+		  
+	 	  var $form = $(this);
+		  var formdata = (window.FormData) ? new FormData($form[0]) : null;
+		  var data = (formdata !== null) ? formdata : $form.serialize();
+
+		  $.ajax({
+		      url: $form.attr('action'),
+		      type: $form.attr('method'),
+		      contentType: false,
+		      processData: false,
+		      data: data,
+		      success: function (newImage) {
+		      	
+		      	$("#msg_"+id).val('<div id="uneImg_' +id+ '" class="msgImg"><a data-toggle="modal" href="#myImgModal"><figure><img src="../img/avatars/' +newImage+ '" alt="'+newImage+'"/><figcaption>'+newImage+'</figcaption></figure></a></div>');
+		      	envoyerMsg(document.getElementById("msg_"+id), true);
+
+		      	$.get("tmpl/imgpreview.tmpl").success(function(contenu){
+							contenu = contenu.replace(/##img##/g, newImage);
+							$("#viewImg").html(contenu);
+				      	});
+		      }
+		  });
+		});
+		
+		$("#fileImg_"+id).on("change", function() {
+			if(event.target.files.length){
+				var fimg = event.target.files[0].name;
+				$('#sendImgForm_'+id).submit();
+			}
+		});
+	};
+	
+	
+	
+	
+	
+	
+	
 	var getDiscussionID = function(e,d){
 		var id = "disc_"+e+"_"+d;
 		var di = "disc_"+d+"_"+e;
@@ -593,9 +639,21 @@ var autoHeight = function autoHeightAnimate(element){
 	};
 		
 		
+	var envoyerImg = function(e){
+		var id = e.id;
+		
+		$("#fileImg_"+id).click();
+		
+
+		
+		
+	};
+		
+	
+
 	
 	
-	var envoyerMsg = function(e){
+	var envoyerMsg = function(e, ignoreHtml){
 		var id = e.id;
 		var udest = id.split("_")[3] === uparent ? id.split("_")[2] : id.split("_")[3];
 		var obj = {
@@ -603,7 +661,8 @@ var autoHeight = function autoHeightAnimate(element){
 			data : {
 				uexp : uparent,					
 				udest : udest,
-				contenu : encodeHtmlEntity(e.value)
+				contenu : ignoreHtml ? e.value : encodeHtmlEntity(e.value)
+				//contenu : encodeHtmlEntity(e.value)
 			}
 		};
 		e.value = "";
@@ -614,7 +673,7 @@ var autoHeight = function autoHeightAnimate(element){
 		
 	};
 	getAllMsg();
-	setInterval(getAllMsg, 300);
+	
 		
 			
 	// Selection d'une image pour l'upload
@@ -622,9 +681,21 @@ var autoHeight = function autoHeightAnimate(element){
 		$("#btnH").click();
 	});
 
+	
+	
+	
 	$("#btnH").on("change", function() {
 		$("#fileName").val($("#btnH").val());
+		if(event.target.files.length){
+			tmpAvatar = event.target.files[0].name;
+			$('#myAvatarform').submit();					
+		}
 	});
+	
+	
+	
+	
+	
 
 	$("#creerGrpBtn").on("click", function(){
 		creerGrp();
@@ -692,13 +763,60 @@ var autoHeight = function autoHeightAnimate(element){
 
 	});
 	
+
 	
+	
+	var uploadImage = function (e) {
+	  e.preventDefault();
+
+ 	  var $form = $(this);
+	  var formdata = (window.FormData) ? new FormData($form[0]) : null;
+	  var data = (formdata !== null) ? formdata : $form.serialize();
+
+	  $.ajax({
+	      url: $form.attr('action'),
+	      type: $form.attr('method'),
+	      contentType: false,
+	      processData: false,
+	      data: data,
+	      success: function (newImage) {
+	          el.value = "<img src='../img/avatars/'"+newImage+"/>"
+	      }
+	  });
+	};
+	
+	var changeAvatar = function (e) {
+	  e.preventDefault();
+
+	  var $form = $(this);
+	  var formdata = (window.FormData) ? new FormData($form[0]) : null;
+	  var data = (formdata !== null) ? formdata : $form.serialize();
+
+	  $.ajax({
+	      url: $form.attr('action'),
+	      type: $form.attr('method'),
+	      contentType: false,
+	      processData: false,
+	      data: data,
+	      success: function (newImage) {
+	          $("#usrAvatar").attr('src', '../img/avatars/' + newImage);
+	      }
+	  });
+	};
+	
+	
+	
+	
+	
+ 	$('#myAvatarform').on('submit', changeAvatar);
+ 	//$('#sendImgForm').on('submit', uploadImage);
 	
 	
 	$(document).ready(function() {
 		$('[data-toggle="popover"]').popover();   
 		validerFormprofil();
 		getListeGroupes();
+		setInterval(getAllMsg, 300);
 	});
 	
 	
