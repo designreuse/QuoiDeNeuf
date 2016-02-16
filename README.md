@@ -29,7 +29,7 @@ Un utilisateur doit s'inscrire afin de pouvoir utiliser l'application. Après in
   - jQuery : pour les appels Ajax, et autre manipulations du DOM.
   - Log4j : pour la génération de logs sur la sortie standard et dans un fichier.
   - JSTL : pour plus de simplicité d'écriture dans les jsp.
-
+  - Bootstap.
 
 ## Sécurité & Infos :
  1. Protection contre les injections SQL (PreparedStatement).
@@ -37,6 +37,7 @@ Un utilisateur doit s'inscrire afin de pouvoir utiliser l'application. Après in
  3. Vérification des données envoyées cotés client et serveur.
  4. Filtre pour limiter l'accès aux pages privées.
  5. Log de toute activité : Adresse IP, port, date, etc.….  
+ 6. Hashage des mots de passes.
 
 ## Architecture :
 ![Architecture](./Docs/archi.png)
@@ -76,9 +77,7 @@ Une autre vérification est réalisée au niveau du service. Elle permet de vér
 
 La servlet agit comme un « contrôleur ». Il permet la redirection de la requête vers le bon service, mais aussi l'envoie de la réponse au client.
 
-Le client ne dispose que deux taches :
-- appeler les services dont il a besoin.
-- faire la mapping entre la réponse du service et l'IHM.
+
 
 Remarque : Toute données est vérifié en plus sur le client avant envoie au serveur.
 
@@ -91,6 +90,7 @@ Il fallait faire un choix sur l'architecture de l'application.
 Avantages :
 - Tous les appels service se font vers une seule et unique url. Et c'est le contrôleur qui sélectionne le bon service.
 
-
 - ### Coté Client :
-Il fallait faire un choix sur l'architecture de l'application.
+Le client ne dispose que deux taches :
+- appeler les services dont il a besoin.
+- faire la mapping entre la réponse du service et l'IHM.
