@@ -62,13 +62,12 @@ label.invalid {
 	border-radius: 0 0 5px 5px;
 }
 
-
-
 .mainUserPhoto blockquote {
 	float: left;
 	display: inline;
-	margin: 0;
+	margin: 0 20px;
 }
+
 .mainUserPhoto img {
 	float: left;
 	width: 80px;

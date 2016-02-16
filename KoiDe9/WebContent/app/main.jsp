@@ -22,8 +22,6 @@
 			</div>
 			<div>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#" data-toggle="popover" data-placement="bottom" data-content="Defaut">Theme</a></li>
-					<li></li>
 					<li><a href="../index.jsp?deconnexion=oui"> <span
 							id="seDeco"></span> Se déconnecter
 					</a></li>
