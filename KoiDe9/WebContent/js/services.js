@@ -16,7 +16,7 @@ var services = {
 			.html('<div class="alert alert-' +type+ ' palert"><span class="glyphicon glyphicon-flag"></span> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> ' +msg+ '</div>')
 			.hide()
 			.slideDown(200)
-			.delay(5000)
+			.delay(3000)
 			.slideUp(200);
 	}
 	

@@ -21,8 +21,8 @@ public class EnregistrerUtilisateurService extends AbstractService {
 	
 	@Override
 	public ResponseObject serviceLogic(RequestObject requestObject, ServletRequest servletRequest) {
-		final String login = requestObject.getDataStringValue(TabAndCo.USERS_LOGIN);
-		
+		final String login = requestObject.getDataStringValue(TabAndCo.USERS_LOGIN).toLowerCase();
+
 		// Verifier si le login est deja utilise
 		boolean existeDeja = BddUtils.existeDans("users", TabAndCo.USERS_LOGIN, login);
 		if(existeDeja){

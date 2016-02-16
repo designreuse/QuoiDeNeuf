@@ -20,22 +20,12 @@
 
 
 
-	<script src="./js/vendor/jquery-1.12.0.min.js"></script>
+<script src="./js/vendor/jquery-1.12.0.min.js"></script>
 <script src="./js/vendor/jquery.validate.min.js"></script>
 <script src="./js/vendor/bootstrap.min.js"></script>
 <script src="./js/utils.js"></script>
 <script src="./js/services.js"></script>
-<script>
-$(document).ready(function() {
 
-
-
-
-	
-});
-
-
-</script>
 
 
 </body>

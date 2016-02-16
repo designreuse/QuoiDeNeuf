@@ -35,7 +35,7 @@ public class VerifierUtilisateurService extends AbstractService {
 		try {
 			final PreparedStatement pst = connection.prepareStatement("SELECT * FROM users WHERE login = ? AND mdp = md5(?);");
 
-			final String login = requestObject.getDataStringValue(TabAndCo.USERS_LOGIN);
+			final String login = requestObject.getDataStringValue(TabAndCo.USERS_LOGIN).toLowerCase();
 			final String mdp   = requestObject.getDataStringValue(TabAndCo.USERS_MDP);  
 			pst.setString(1, login);
 			pst.setString(2, mdp);

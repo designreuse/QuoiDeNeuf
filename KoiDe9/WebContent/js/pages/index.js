@@ -68,7 +68,7 @@ $(document).ready(function() {
 				minlength : "Taille minimale de 3."
 			}
 		},
-		errorClass : "has-error",
+		errorClass : "invalid",
 		submitHandler : function() {
 			if (document.getElementById("chxConnex").checked) {
 				verifierUsr();

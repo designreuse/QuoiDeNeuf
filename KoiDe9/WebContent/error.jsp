@@ -50,7 +50,7 @@
 	<h1>ERROOOOOOOOOOOOR</h1>
 
 			<form method="POST" id="myform" action="upload" enctype="multipart/form-data">
-				<input class="btn btn-default form-control" type="file" name="fichier" placeholder="Selectionnez un fichier..." accept="image/*" required="required" /> <br>
+				<input class="btn btn-default form-control" type="file" name="fichier" accept="image/*" /> <br>
 				<input id="btn" class="btn btn-success col-xs-4 col-xs-offset-4" type="submit" value="Uploader" />
 			</form>
 			

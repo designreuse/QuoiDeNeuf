@@ -6,9 +6,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>QuoiDeNeuf - Main</title>
+<title>Main - QuoiDeNeuf</title>
 <meta name="QuoiDeNeuf" content="QuoiDeNeuf? SYSTEME DE MESSAGERIE INSTANTANEE">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../css/normalize.css">
 <link rel="stylesheet" href="../css/bootstrap.min.css">
 <link rel="stylesheet" href="../css/perso.css">
 </head>
@@ -35,9 +36,9 @@
 	
 
 	<div class="clearfix container main mainDiag">
-		<button type="button" class="col-md-2 btn btn-success" name="showprofil" id="showprofil"><span class="glyphicon glyphicon-user"></span> Mon Profil</button>
-		<button type="button" class="col-md-2 btn btn-success" name="showGrps" id="showGrps" value="Mes groupes" ><span class="glyphicon glyphicon-list-alt"></span> Mes groupes</button>
-		<button type="button" class="col-md-3 btn btn-success" name="addnewusers" id="addnewusers" ><span class="glyphicon glyphicon-search"></span> Trouver des utilisateurs</button>
+		<button type="button" class="col-md-2 btn btn-primary" name="showprofil" id="showprofil"><span class="glyphicon glyphicon-user"></span> Mon Profil</button>
+		<button type="button" class="col-md-2 btn btn-primary" name="showGrps" id="showGrps" value="Mes groupes" ><span class="glyphicon glyphicon-list-alt"></span> Mes groupes</button>
+		<button type="button" class="col-md-3 btn btn-primary" name="addnewusers" id="addnewusers" ><span class="glyphicon glyphicon-search"></span> Trouver des utilisateurs</button>
 		<div class="mainc">
 			<div id="card">
 				<div class="col-xs-12 front" id="front">
@@ -160,7 +161,29 @@
 		</div>
 	</div>
 	<div class="col-md-12" id="viewImg" ></div>	
-<a href="#0" class="cd-top">Top</a>
+	
+	
+	<div>
+	    <div id="myImgModal" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="clearfix modal-content text-center">
+                    <div class="modal-header success">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Aperçu Image</h4>
+        </div>
+            
+            
+            	<div class="col-md-12 modal-body">
+	               <img class="col-md-12" id="prevImg" alt="" src="">
+            	</div>
+            </div>
+        </div>
+    </div>
+	</div>
+	
+	
+	
+<a href="#0" class="cd-top" style="display: none;">Top</a>
 <script src="../js/vendor/jquery-1.12.0.min.js"></script>
 <script src="../js/vendor/jquery.validate.min.js"></script>
 <script src="../js/vendor/bootstrap.min.js"></script>
@@ -311,8 +334,8 @@
 		if(!id){
 			id = "disc_"+uparent+"_"+numu;
 			var formImg = '<form method="POST" id="sendImgForm_##idDisc##" action="../upload" enctype="multipart/form-data"><input type="file" name="fichier" id="fileImg_##idDisc##" type="file" name="fichier" class="hidden" /></form>';
-			var tmpl = formImg+'<div id="##idDisc##" class="col-md-12 discussion fermee"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div><div class="bas" id="bas_##idDisc##" style="display: none;"><table class="table corps"> <tr><td class="col-md-2 participants text-center"><div class="col-md-12"><img src="../img/avatars/'+o.utilisateur.photo+'" alt="'+o.utilisateur.nom+'"/><h4>'+o.utilisateur.nom+'</h4></div><div class="col-md-12"><img src="../img/avatars/${sessionScope["dejaConnecte"].photo}" alt="${sessionScope["dejaConnecte"].nom}"/><h4>${sessionScope["dejaConnecte"].nom}</h4></div></td><td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td></tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"><button id="envoyerImg_##idDisc##" onclick="envoyerImg(##idDisc##)" class="btn btn-default" type="button"> <span class="glyphicon glyphicon-picture"></span> </button><button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button></span> </div></div></div>';
-			var res = tmpl.replace(/##idDisc##/g, id).replace(/##titre##/g, "<div class='col-md-10'><h4> <span class='glyphicon glyphicon-align-left'></span> Discussion : Moi - " + o.utilisateur.nom + "</h4></div><div id='notif_"+id+"' class='col-md-2 hidden'><i class='badge'><span class='glyphicon glyphicon-bell'></span> Nouveau message ! </i></div>");
+			var tmpl = formImg+'<div id="##idDisc##" class="col-md-12 discussion"> <div id="entete_##idDisc##" class="col-md-12 entete">##titre##</div> <div class="bas" id="bas_##idDisc##" style="display: none;"> <table class="table corps"> <tr> <td class="col-md-2 participants text-center"></td> <td class="col-md-10 dialog"><div id="dialog_##idDisc##"></div></td> </tr> </table> <div class="col-md-12 input-group pied"> <input type="text" class="form-control" id="msg_##idDisc##" placeholder="Votre message ici . . ."> <span class="input-group-btn"> <button id="envoyerImg_##idDisc##" onclick="envoyerImg(##idDisc##)" class="btn btn-default" type="button"> <span class="glyphicon glyphicon-picture"></span> </button> <button id="envoyerMsg_##idDisc##" onclick="envoyerMsg(msg_##idDisc##)" class="btn btn-default" type="button"> Envoyer </button> </span> </div> </div> </div>';
+			var res = tmpl.replace(/##idDisc##/g, id).replace(/##titre##/g, "<h4> <span class='glyphicon glyphicon-align-left'></span> Discussion : Moi - " + nom + "</h4>");
 			$("#chatZone").append(res);
 			addDialogEvents(id);
 		}
@@ -349,7 +372,7 @@
 						.replace(/##usrDescription##/g, infos.description);
 					});
 					
-					console.log(res);
+					//console.log(res);
 				}	
 			}
 			}).then(function(e) {
@@ -603,14 +626,13 @@ var autoHeight = function autoHeightAnimate(element){
 		      processData: false,
 		      data: data,
 		      success: function (newImage) {
-		      	
-		      	$("#msg_"+id).val('<div id="uneImg_' +id+ '" class="msgImg"><a data-toggle="modal" href="#myImgModal"><figure><img src="../img/avatars/' +newImage+ '" alt="'+newImage+'"/><figcaption>'+newImage+'</figcaption></figure></a></div>');
+		      	var idModal = newImage+"_Modal";
+		      	var btn = '<button type="button" id="img_'+newImage+'" class="btn btn-default" onclick="showImg(this)" ><img src="../img/avatars/' +newImage+ '"/></button>';
+		      	$("#msg_"+id).val(btn);
 		      	envoyerMsg(document.getElementById("msg_"+id), true);
 
-		      	$.get("tmpl/imgpreview.tmpl").success(function(contenu){
-							contenu = contenu.replace(/##img##/g, newImage);
-							$("#viewImg").html(contenu);
-				      	});
+		      	
+		      					//console.log(document.getElementById("viewImg"));		      	
 		      }
 		  });
 		});
@@ -625,7 +647,12 @@ var autoHeight = function autoHeightAnimate(element){
 	
 	
 	
-	
+	var showImg = function(el){
+		var id = el.id;
+		var img = id.substr(4);
+		$("#prevImg").attr("src", "../img/avatars/" + img);
+		$("#myImgModal").modal();
+	};
 	
 	
 	
@@ -666,7 +693,7 @@ var autoHeight = function autoHeightAnimate(element){
 			}
 		};
 		e.value = "";
-		console.log(obj);
+		//console.log(obj);
 		services.call(obj, true).then(function(resp) {
 			
 		});
@@ -707,7 +734,7 @@ var autoHeight = function autoHeightAnimate(element){
 
 
 	$("#showGrps").on("click", function() {
-		$("#showGrps").toggleClass("btn-success"); 
+		$("#showGrps").toggleClass("btn-primary"); 
 		$("#mygroups").slideToggle(200, "swing");
 	});
 	
@@ -728,7 +755,7 @@ var autoHeight = function autoHeightAnimate(element){
 	
 	// Flip zone detail utilisateur
 	afficherProfilBtn.on("click", function() {
-		afficherProfilBtn.toggleClass("btn-success"); 
+		afficherProfilBtn.toggleClass("btn-primary"); 
 		$("#card").toggleClass("flipped");
 		if($("#card").hasClass("flipped")){
 			$("#backRecherche").hide();
@@ -747,7 +774,7 @@ var autoHeight = function autoHeightAnimate(element){
 	});
 	
 	rechercherUsrBtn.on("click", function(){
-		rechercherUsrBtn.toggleClass("btn-success"); 
+		rechercherUsrBtn.toggleClass("btn-primary"); 
 		$("#card").toggleClass("flipped");
 		if($("#card").hasClass("flipped")){
 			$("#backRecherche").hide();		
@@ -819,28 +846,18 @@ var autoHeight = function autoHeightAnimate(element){
 		setInterval(getAllMsg, 300);
 		
 		var offset = 300,
-		//browser window scroll (in pixels) after which the "back to top" link opacity is reduced
 		offset_opacity = 1200,
-		//duration of the top scrolling animation (in ms)
-		scroll_top_duration = 700,
-		//grab the "back to top" link
 		$back_to_top = $('.cd-top');
 
 	//hide or show the "back to top" link
 	$(window).scroll(function(){
-		( $(this).scrollTop() > offset ) ? $back_to_top.addClass('cd-is-visible') : $back_to_top.removeClass('cd-is-visible cd-fade-out');
-		if( $(this).scrollTop() > offset_opacity ) { 
-			$back_to_top.addClass('cd-fade-out');
-		}
+		( $(this).scrollTop() > offset ) ? $back_to_top.fadeIn() : $back_to_top.fadeOut();
 	});
 
 	//smooth scroll to top
 	$back_to_top.on('click', function(event){
 		event.preventDefault();
-		$('body,html').animate({
-			scrollTop: 0 ,
-		 	}, scroll_top_duration
-		);
+		$('body,html').animate({ scrollTop: 0 }, 700 );
 	});
 		
 		

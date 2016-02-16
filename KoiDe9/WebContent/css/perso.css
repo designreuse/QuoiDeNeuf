@@ -1,9 +1,10 @@
 * {
-font-family: 'Open Sans', sans-serif;s
+	font-family: 'Open Sans', sans-serif;s
+   	font-weight: 300;
 }
 body{
 background-color: #292f34;
-	background: url("../img/app/bg2.png");
+	/*background: url("../img/app/bglille.png");*/
 }
 
 .main{
@@ -21,10 +22,10 @@ background-color: #292f34;
 }
 
 .mainDiag{
-background-color: #848C91;
-    background-image: repeating-linear-gradient(135deg, #353A41, #353A41 42%, transparent 48%, transparent 50%);
+	background-color: rgba(83, 90, 93, 0.4);
+    /*background-image: repeating-linear-gradient(135deg, #353A41, #353A41 42%, transparent 48%, transparent 50%);*/
     background-size: 12px 12px;
-    box-shadow: 2px 2px 2px 2px #212121;
+    box-shadow: 2px 2px 2px 2px #243035;
 }
 
 .innerZone {
@@ -36,7 +37,8 @@ background-color: #848C91;
 
 
 .container-fluid {
-	box-shadow: 2px 2px 2px 2px #212121;
+	box-shadow: 2px 2px 2px 2px #243035;
+	background: #535A5D;
 }
 	
 
@@ -292,7 +294,9 @@ input[type=radio]:checked + label:before {
     height: 200px;
 }
 
-
+.dialog img {
+	width: 128px;
+}
 
 
 .mesMsg {
@@ -325,52 +329,55 @@ input[type=radio]:checked + label:before {
 }
 
 .entete:HOVER{
-	background: #BDC3C7;
+	    background-color: rgba(83, 90, 93, 0.4);
 }
 
-.msgImg img {
-    height: 128px;
-    border-radius: 8px;
+.msgImg  {
+    border-radius: 4px;
     background: #ecf0f1;
     padding: 4px;
     border: 1px solid #0992CD;
     box-shadow: 1px 1px 1px 1px #4692A9;	
+    text-align: center;
+}
+.msgImg img {
+    height: 128px;
+    padding: 8px;
+}
+
+figcaption {
+	color : dimgray;
+	text-align: center;
+	margin : 10px;
+	padding: 4px 10px;
+	height : inherit;
+	border-radius: 2px;
 }
 
 .cd-top {
-  display: inline-block;
-  height: 40px;
-  width: 40px;
-  position: fixed;
-  bottom: 40px;
-  right: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-  /* image replacement properties */
-  overflow: hidden;
-  text-indent: 100%;
-  white-space: nowrap;
-  background: rgba(232, 98, 86, 0.8) url(../img/cd-top-arrow.svg) no-repeat center 50%;
-  visibility: hidden;
-  opacity: 0;
-  -webkit-transition: opacity .3s 0s, visibility 0s .3s;
-  -moz-transition: opacity .3s 0s, visibility 0s .3s;
-  transition: opacity .3s 0s, visibility 0s .3s;
+    display: inline-block;
+    height: 46px;
+    width: 46px;
+    position: fixed;
+    bottom: 40px;
+    right: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    text-indent: 100%;
+    white-space: nowrap;
+    background: rgba(232, 98, 86, 0.8) url(../img/app/up.png) no-repeat center;
+    background-size: 70%;
+    border-radius: 8px;
 }
-.cd-top.cd-is-visible, .cd-top.cd-fade-out, .no-touch .cd-top:hover {
-  -webkit-transition: opacity .3s 0s, visibility 0s 0s;
-  -moz-transition: opacity .3s 0s, visibility 0s 0s;
-  transition: opacity .3s 0s, visibility 0s 0s;
-}
+
 .cd-top.cd-is-visible {
-  /* the button becomes visible */
   visibility: visible;
   opacity: 1;
 }
-.cd-top.cd-fade-out {
-  /* if the user keeps scrolling down, the button is out of focus and becomes less visible */
-  opacity: .5;
-}
-.no-touch .cd-top:hover {
-  background-color: #e86256;
+
+.cd-top:hover  {
+  background-color: #ffcf2d;
   opacity: 1;
 }
+
+

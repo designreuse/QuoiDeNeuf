@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
-import app.utils.BddUtils;
 import app.utils.MappingBddToBeans;
 import app.utils.ServiceUtils;
 import app.utils.TabAndCo;
