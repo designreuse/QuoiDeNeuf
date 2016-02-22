@@ -22,15 +22,12 @@
 			</div>
 			<div>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="../index.jsp?deconnexion=oui"> <span
-							id="seDeco"></span> Se déconnecter
-					</a></li>
+					<li><a href="../index.jsp?deconnexion=oui"> <span id="seDeco"></span> Se déconnecter </a></li>
 				</ul>
 
 			</div>
 		</div>
 	</nav> <!-- Fin navbar -->
-	
 	
 
 	<div class="clearfix container main mainDiag">
@@ -182,6 +179,7 @@
 	
 	
 <a href="#0" class="cd-top" style="display: none;">Top</a>
+
 <script src="../js/vendor/jquery-1.12.0.min.js"></script>
 <script src="../js/vendor/jquery.validate.min.js"></script>
 <script src="../js/vendor/bootstrap.min.js"></script>

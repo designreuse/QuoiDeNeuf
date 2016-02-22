@@ -41,11 +41,20 @@ public class UpdateUtilisateurService extends AbstractService {
             
             
             final Connection connection = ServiceUtils.getConnection();
-            final StringBuilder req = new StringBuilder("update users set mdp = md5(?), nom = ?, email = ?, description = ? , photo = ? where numu = ?;" );
+            final StringBuilder req = new StringBuilder();
+            
+            final String r1 = "update users set mdp = md5(?), nom = ?, email = ?, description = ? , photo = ? where numu = ?;";
+            final String r2 = "update users set nom = ?, email = ?, description = ? , photo = ? where numu = ?;";
+            
             
             String mdp = requestObject.getDataStringValue(TabAndCo.USERS_MDP);
             
-           
+            if(mdp == null || "xxxxxxxx".equals(mdp)){
+            	req.append(r2);
+            }else{
+            	req.append(r1);
+            }
+            
             String nom = requestObject.getDataStringValue(TabAndCo.USERS_NOM);
             
             if(nom == null || nom.isEmpty()){ nom = utilisateur.getLogin(); }
@@ -64,12 +73,20 @@ public class UpdateUtilisateurService extends AbstractService {
             try {
                 final PreparedStatement pst = connection.prepareStatement(req.toString());
                 
-                pst.setString(1, mdp);
-                pst.setString(2, nom);
-                pst.setString(3, email);
-                pst.setString(4, desc);
-                pst.setString(5, photo);
-                pst.setInt(6, requestObject.getDataIntValue(TabAndCo.USERS_NUMU));
+                if(mdp == null || "xxxxxxxx".equals(mdp)){
+                    pst.setString(1, nom);
+                    pst.setString(2, email);
+                    pst.setString(3, desc);
+                    pst.setString(4, photo);
+                    pst.setInt(5, requestObject.getDataIntValue(TabAndCo.USERS_NUMU));
+                }else{
+                    pst.setString(1, mdp);
+                    pst.setString(2, nom);
+                    pst.setString(3, email);
+                    pst.setString(4, desc);
+                    pst.setString(5, photo);
+                    pst.setInt(6, requestObject.getDataIntValue(TabAndCo.USERS_NUMU));
+                }
                 
                 pst.executeUpdate();
                 this.responseObject.setResponseData(ResponseObject.RETURN_CODE_OK, "Utilisateur modifié avec succès.", null);
@@ -93,3 +110,4 @@ public class UpdateUtilisateurService extends AbstractService {
     }
 
 }
+

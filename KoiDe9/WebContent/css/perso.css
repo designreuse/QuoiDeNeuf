@@ -4,7 +4,7 @@
 }
 body{
 background-color: #292f34;
-	/*background: url("../img/app/bglille.png");*/
+	background: url("../img/app/bglille.png");
 }
 
 .main{
@@ -38,7 +38,7 @@ background-color: #292f34;
 
 .container-fluid {
 	box-shadow: 2px 2px 2px 2px #243035;
-	background: #535A5D;
+	background: #39474C;
 }
 	
 
@@ -380,3 +380,12 @@ figcaption {
 }
 
 
+.mainerror {
+	background-color: indianred;
+	font-size : 1.3em;
+	color: #ecf0f1;
+}
+
+.mainerror h1 {
+	font-size : 3.6em;
+}
