@@ -18,10 +18,7 @@
     - Difﬁcultés techniques rencontrées et solutions apportées.
 
   4. Conclusion
-    - La documentation utilisateur (tutorial)
-    - Objectif de cette application
-    - Du point de vue de l’utilisateur
-
+    - La documentation utilisateur du point de vue de ce dernier (tutoriel)
 
 ## 1. DEPLOIEMENT
 1. Importer le fichier script.sql dans la base de données afin de créer les tables nécessaires, ainsi que les utilisateurs par defaut.
@@ -69,20 +66,31 @@ Avec un peu plus de temps,  On aurait pu apporter quelques ameliorations :
 - Recuperation des mots de passes par Mail.
 - Voir les utilisateurs connecté en temps réel.
 - Ameliorer la compatibilité avec certains navigateurs.
-- SSL...
+- SSL , changer de cryptage du mot de passe car md5 est dépassé.
+- Accessible selon les critères opquast.
+- Gestion des emojis.
+- Possibilité d'envoyer un flux vidéo.
+- Pouvoir jouer à des mini-jeux comme sur msn.
 
 #### 2.4 EN QUOI CE PROJET ÉTAIT DIFFICILE
 - La difficulté principale été de realiser un MCD correct qui repond à l'ensemble des problematiques de cette appliction.
 - Faire un choix d'architecture pour l'application.
+- La répartition du travail a été compliqué de part la différence d'experience en terme de developpement.
+- Le fait que le developpement de ce projet est été a faire en parallèle d'autres.
 
 #### 2.5 CONCLUSION
+
+Ce projet c'est révèlé bien plus riche qu'il y parait de prime abord. Et ce sur n'importe qu'elle plan.
+Que se soit humain, en effet la réparatition du travail au sein du groupe est un des sujets épineux car il y a eu beaucoup a faire mais les capacités de chacun n'étaient pas complémentaires dans tous les domaines. Celà c'est également ressentit dans les discussions pour les différents choix techniques.
+Sur le plan technique puisque beaucoup, si ce n'est l'ensemble, des différentes technologies vu au cours de l'année ont dû trouver une place dans ce projet, ce qui a permit d'en appréhender un peu plus leur utilitées au sein d'un travail concret ainsi qu'une meilleur maitrise de ces dernières. Mais également la découverte de nouvelles technologies.
+
 
 
 
 ## 3. LA DESCRIPTION TECHNIQUE DU PROJET
 
 #### 3.1 OBJECTIF TECHNIQUES DU TRAVAIL
-- Utilisé un maximum de technologies pour mener à bien ce projet.
+- Utilisé un maximum des technologies imposées pour mener à bien ce projet.
 
 #### 3.2 PRINCIPE DE RÉALISATION
 
@@ -167,3 +175,48 @@ Coté developpement, le client ne dispose que deux taches :
 
 
 ## 4. CONCLUSION
+#### tutoriel
+
+Nous voici devant la premiere fênetre de l'application KoiDe9, a savoir la page d'accueil :
+ ![Architecture](./Docs/captures/accueil.png)
+
+
+Si vous ne possédè pas de compte, dirigez vous vers la page d'inscription en sélectionnant la case correspondante sur la page d'accueil:
+
+ ![Architecture](./Docs/captures/inscription.png)
+
+Dans le cas contraire, ou une fois votre inscription complétée,connectez vous avec votre login et mot de passe.
+Vous êtes dirigé sur votre page d'accueil :
+
+ ![Architecture](./Docs/captures/main.png)
+
+
+Vous pouvez customiser votre profil, comme par exemple votre avatar, via l'onglet "Mon Profil" dédié à celui-ci :
+
+ ![Architecture](./Docs/captures/profil.png)
+
+Une fois votre profil à votre convenance, dirigez vous sur l'onglet "Mes Groupes" :
+
+ ![Architecture](./Docs/captures/groupes.png)
+
+Vous pourrez y voir que des groupes y sont déjà par défaut comme famille par exemple. Vous pouvez bien entendu créer vos propre groupes.
+
+A présent dirigez vous vers l'onglet "Trouver des utilisateurs" :
+ Afin de commencer a discuter avec d'autres utilisateurs vous devez dans un premier temps les ajouter en amis, dans le groupe de votre choix.
+ La recherche s'effectue parmis tous les utilisateurs du service. De plus vous pouvez rechercher une personne en ne connsaissant que partiellement son nom ou son login.
+ Vous aurez donc comme résultat tous les utilisateurs correspondant à la recherche :
+
+  ![Architecture](./Docs/captures/recherche.png)   
+
+Une fois vos nouveaux amis ajoutés à vos différents groupes, plusieurs choix s'offrent à vous :
+ - En retournant dans l'onglet "Mes groupes" vous pouvez supprimer les utilisateurs des groupes dans lesquels vous les avaient ajouté.
+ - Consulter les détails de son profil :
+
+  ![Architecture](./Docs/captures/profilAmi.png)   
+
+  - Et bien entendu discuter avec eux :
+
+
+  ![Architecture](./Docs/captures/conv.png)
+
+A tout moment vous pouvez vous déconnecter en cliquant sur le bouton "se déconnecter" disponnible en haut à droite depuis n'importe quelle page.
